@@ -8,6 +8,11 @@ export function getCurrentTerm(): string {
   return String(new Date().getUTCFullYear())
 }
 
+/** 同样的年份口径，取给定 ISO 时间所在的 UTC 年份——用于 cert serial 挂靠活动发生年份而非签发年份。 */
+export function termForDate(iso: string): string {
+  return String(new Date(iso).getUTCFullYear())
+}
+
 /** 级：term 后两位，用作 member_no 前缀。 */
 export function termGrade(term: string): number {
   const suffix = term.slice(-2)

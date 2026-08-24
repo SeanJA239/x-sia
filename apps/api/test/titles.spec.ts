@@ -212,4 +212,30 @@ describe('certificates', () => {
 
     expect(first.serial).not.toBe(second.serial)
   })
+
+  it('serial term follows the event year, not the issuance year (late back-issue)', async () => {
+    const { org, adminToken } = await setupAdmin()
+    const { userId: holderId } = await createTestUser({
+      email: `cert-backdated-${crypto.randomUUID()}@t.com`,
+    })
+    // 活动发生在去年，今天（本地测试环境的真实当前年份）才补发证书
+    const lastYearEventId = await createEvent({
+      orgId: org.id,
+      startsAt: '2025-03-01T10:00:00.000Z',
+      endsAt: '2025-03-01T12:00:00.000Z',
+    })
+
+    const issued = (await (
+      await app.request(
+        `/api/v1/admin/users/${holderId}/certificates`,
+        authed(adminToken, {
+          method: 'POST',
+          body: JSON.stringify({ event_id: lastYearEventId }),
+        }),
+        env,
+      )
+    ).json()) as { serial: string }
+
+    expect(issued.serial.startsWith('XSIA-2025-')).toBe(true)
+  })
 })

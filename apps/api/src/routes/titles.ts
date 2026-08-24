@@ -6,7 +6,7 @@ import { auditLogInsert } from '../lib/audit'
 import { generateCertSerial } from '../lib/cert'
 import { AppError, Errors } from '../lib/errors'
 import { newId } from '../lib/id'
-import { getCurrentTerm } from '../lib/term'
+import { termForDate } from '../lib/term'
 import { listUserTitles, resolveWornId } from '../lib/titles'
 import { requireAdmin, requireAuth } from '../middleware/auth'
 import type { AuthedEnv } from '../types'
@@ -151,13 +151,14 @@ titleRoutes.post('/admin/users/:uid/certificates', requireAuth, requireAdmin, as
   const targetUserId = c.req.param('uid')
 
   const [eventRow] = await db
-    .select({ id: event.id })
+    .select({ id: event.id, startsAt: event.startsAt })
     .from(event)
     .where(and(eq(event.orgId, org.id), eq(event.id, parsed.data.event_id)))
     .limit(1)
   if (!eventRow) throw Errors.notFound('活动不存在')
 
-  const term = getCurrentTerm()
+  // 证书是对那场活动的证明，term 挂活动发生的年份，不是签发时的年份——跨年补发不改变归属。
+  const term = termForDate(eventRow.startsAt)
   const id = newId()
   const now = new Date().toISOString()
 
