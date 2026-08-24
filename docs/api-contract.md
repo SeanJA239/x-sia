@@ -96,10 +96,11 @@ api 与 app 两端共同遵守本文件。改动契约必须先改本文件再�
 | GET | `/events` | 登录可见。`{items: [{id, title, starts_at, ends_at, location, luma_id, checked_in}]}`（checked_in = 当前用户是否已签） |
 | POST | `/admin/events` | `{title, starts_at, ends_at, location, luma_id?}` |
 | PATCH | `/admin/events/:id` | 局部更新同上字段 |
+| GET | `/admin/events/:id` | 单条详情，形状同 POST 响应 |
 | GET | `/admin/events/:id/screen-token` | 大屏轮询用：`{token, expires_at}`（每 window 变化） |
 | GET | `/admin/events/:id/attendance` | 签到名单 `{items: [{user: {id, display_name}, member_no, checked_in_at, method}]}` |
-| POST | `/admin/events/:id/attendance` | 手动补录 `{user_id}`，method='manual'，写 audit_log |
-| POST | `/checkin` | `{token}`。active 成员；验签 + window + event 起止时间（前后各宽限 30 分钟）→ 写 attendance（method='qr'）→ `{event: {id, title}, checked_in_at}`。错误码（已定 HTTP 状态）：`invalid_token`/`token_expired` → 400，`event_not_active` → 403，`already_checked_in` → 409 |
+| POST | `/admin/events/:id/attendance` | 手动补录 `{user_id}`，method='manual'，写 audit_log。目标成员必须 active，否则 403 `member_not_active` |
+| POST | `/checkin` | `{token}`。active 成员；验签 + window + event 起止时间（前后各宽限 30 分钟）→ 写 attendance（method='qr'）→ `{event: {id, title}, checked_in_at}`。错误码（已定 HTTP 状态）：`invalid_token`/`token_expired` → 400，`event_not_active` → 403，`already_checked_in` → 409，且 409 错误体携带原签到时刻：`{error: {code, message, details: {checked_in_at}}}` |
 | GET | `/me/attendance` | 出勤记录 `{items: [{event: {id, title, starts_at}, checked_in_at, method}]}` |
 
 `GET /card` 的 `stats.attendance_count` 自此为真实计数。
@@ -113,8 +114,8 @@ api 与 app 两端共同遵守本文件。改动契约必须先改本文件再�
 |---|---|---|
 | GET | `/posts?kind=&cursor=&limit=` | published 列表倒序：`{items: [{id, kind, title, excerpt, author: {id, display_name}, comment_count, created_at}], next_cursor}` |
 | GET | `/posts/:id` | 详情：`{id, kind, title, body_md, author, created_at, comments: [{id, body, author: {id, display_name}, created_at}]}` |
-| POST | `/posts` | `{kind: 'wall'\|'article', title, body_md}` |
-| POST | `/posts/:id/comments` | `{body}` |
+| POST | `/posts` | `{kind: 'wall'\|'article', title, body_md}` → `{id, kind, title, body_md, author: {id, display_name}, created_at}` |
+| POST | `/posts/:id/comments` | `{body}` → `{id, body, author: {id, display_name}, created_at}`（同详情页 comment 元素形状） |
 | DELETE | `/posts/:id` | 作者或 admin |
 | DELETE | `/comments/:id` | 作者或 admin |
 
