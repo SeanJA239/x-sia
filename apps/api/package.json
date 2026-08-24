@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "wrangler dev",
+    "dev:no-ai": "wrangler dev --config wrangler.test.jsonc",
     "deploy": "wrangler deploy",
     "test": "vitest run",
     "migrate:local": "wrangler d1 migrations apply x-sia-db --local",
