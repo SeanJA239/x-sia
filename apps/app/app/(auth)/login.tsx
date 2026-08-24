@@ -1,4 +1,4 @@
-import { Link } from 'expo-router'
+import { type Href, Link, useLocalSearchParams, useRouter } from 'expo-router'
 import { useState } from 'react'
 import { Pressable, StyleSheet, Text } from 'react-native'
 
@@ -11,6 +11,8 @@ import { useAuth } from '@/lib/auth'
 
 export default function LoginScreen() {
   const { login } = useAuth()
+  const router = useRouter()
+  const { redirect } = useLocalSearchParams<{ redirect?: string }>()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -25,6 +27,9 @@ export default function LoginScreen() {
     setSubmitting(true)
     try {
       await login(email.trim(), password)
+      // redirect 来自登录前的目标页（如 /checkin?t=...），是运行时才知道的动态路径，
+      // 类型化路由的字面量联合天然覆盖不到，这里按官方推荐用 Href 断言。
+      if (redirect) router.replace(redirect as Href)
     } catch (err) {
       setError(err instanceof ApiError ? err.message : '登录失败，请稍后重试。')
     } finally {

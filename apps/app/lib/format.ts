@@ -10,6 +10,26 @@ export function formatFileSize(bytes: number): string {
   return `${value.toFixed(value >= 10 ? 0 : 1)} ${units[unitIndex]}`
 }
 
+export function formatDateTime(iso: string): string {
+  return new Date(iso).toLocaleString('zh-CN', {
+    month: 'numeric',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+}
+
+export function formatDateRange(startsAt: string, endsAt: string): string {
+  const start = new Date(startsAt)
+  const end = new Date(endsAt)
+  const sameDay = start.toDateString() === end.toDateString()
+  const startStr = formatDateTime(startsAt)
+  const endStr = sameDay
+    ? end.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })
+    : formatDateTime(endsAt)
+  return `${startStr} – ${endStr}`
+}
+
 export function mimeLabel(mime: string): string {
   if (mime.startsWith('image/')) return '图片'
   if (mime === 'application/pdf') return 'PDF'

@@ -15,3 +15,15 @@ export function toAbsoluteUrl(path: string): string {
   }
   return path
 }
+
+/** 大屏页拼签到码链接用：`${origin}/checkin?t=<token>`。原生端没有 window，退化为相对路径。 */
+export function getAppOrigin(): string {
+  if (Platform.OS === 'web') {
+    try {
+      return window.location.origin
+    } catch {
+      return ''
+    }
+  }
+  return ''
+}

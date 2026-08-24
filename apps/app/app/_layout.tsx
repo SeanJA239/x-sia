@@ -59,6 +59,8 @@ function RootLayoutNav() {
         </Stack.Protected>
 
         <Stack.Screen name="u/[id]" />
+        <Stack.Screen name="verify/[serial]" />
+        <Stack.Screen name="checkin" />
         <Stack.Screen name="+not-found" />
       </Stack>
     </CardProvider>

@@ -1,6 +1,6 @@
 import { Feather } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import QRCode from 'react-native-qrcode-svg'
 
 import { AppScreen } from '@/components/AppScreen'
@@ -58,16 +58,9 @@ export default function ProfileScreen() {
 
       <Surface style={styles.menu}>
         <MenuRow icon="award" label="我的权益" onPress={() => router.push('/entitlements')} />
-        <MenuRow
-          icon="file-text"
-          label="我的证书"
-          onPress={() => Alert.alert('即将上线', '证书功能正在建设中。')}
-        />
-        <MenuRow
-          icon="check-circle"
-          label="出勤记录"
-          onPress={() => Alert.alert('即将上线', '出勤记录功能正在建设中。')}
-        />
+        <MenuRow icon="star" label="我的称号" onPress={() => router.push('/titles')} />
+        <MenuRow icon="file-text" label="我的证书" onPress={() => router.push('/certificates')} />
+        <MenuRow icon="check-circle" label="出勤记录" onPress={() => router.push('/attendance')} />
         <MenuRow icon="log-out" label="退出登录" onPress={onLogout} destructive last />
       </Surface>
     </AppScreen>

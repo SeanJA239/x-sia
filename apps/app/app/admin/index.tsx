@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Alert, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 
+import { GrantTitleModal } from '@/components/GrantTitleModal'
+import { IssueCertificateModal } from '@/components/IssueCertificateModal'
 import { Button } from '@/components/ui/Button'
 import { Chip } from '@/components/ui/Chip'
 import { ErrorState, LoadingState } from '@/components/ui/StateViews'
@@ -31,6 +33,8 @@ export default function AdminScreen() {
   const [term, setTerm] = useState('')
   const [query, setQuery] = useState('')
   const [pendingAction, setPendingAction] = useState<string | null>(null)
+  const [grantTitleMember, setGrantTitleMember] = useState<AdminMember | null>(null)
+  const [issueCertMember, setIssueCertMember] = useState<AdminMember | null>(null)
 
   const load = useCallback(async (filters: { term?: string; q?: string } = {}) => {
     setState({ status: 'loading' })
@@ -175,12 +179,31 @@ export default function AdminScreen() {
                       style={styles.actionButton}
                     />
                   ) : null}
+                  <Button
+                    title="授予 title"
+                    variant="secondary"
+                    onPress={() => setGrantTitleMember(member)}
+                    style={styles.actionButton}
+                  />
+                  <Button
+                    title="签发证书"
+                    variant="secondary"
+                    onPress={() => setIssueCertMember(member)}
+                    style={styles.actionButton}
+                  />
                 </View>
               </View>
             )
           })}
         </Surface>
       )}
+
+      <GrantTitleModal
+        member={grantTitleMember}
+        onClose={() => setGrantTitleMember(null)}
+        onGranted={() => load({ term: term.trim() || undefined, q: query.trim() || undefined })}
+      />
+      <IssueCertificateModal member={issueCertMember} onClose={() => setIssueCertMember(null)} />
     </ScrollView>
   )
 }
