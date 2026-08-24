@@ -153,11 +153,13 @@ resourceRoutes.get('/resources/:id/file', async (c) => {
   const object = await c.env.BUCKET.get(row.r2Key)
   if (!object) throw Errors.notFound('文件不存在')
 
+  // RFC 6266：非 ASCII 文件名必须走 filename*=UTF-8''...，filename= 只放 ASCII 兜底
+  const asciiFallback = row.title.replace(/[^\x20-\x7e]/g, '_').replace(/"/g, "'")
   return new Response(object.body, {
     headers: {
       'Content-Type': row.mime,
       'Content-Length': String(row.size),
-      'Content-Disposition': `attachment; filename="${encodeURIComponent(row.title)}"`,
+      'Content-Disposition': `attachment; filename="${asciiFallback}"; filename*=UTF-8''${encodeURIComponent(row.title)}`,
     },
   })
 })
