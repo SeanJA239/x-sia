@@ -83,6 +83,59 @@ api 与 app 两端共同遵守本文件。改动契约必须先改本文件再�
 | GET | `/resources/:id/file?exp=&sig=` | HMAC 校验（secret 服务端持有）通过即从 R2 流式返回，无需登录态。 |
 | DELETE | `/resources/:id` | 上传者本人或 admin 下架（写 audit_log）。 |
 
+## 阶段三：活动与轮转码签到
+
+方向：学生扫活动码（§4.2），二维码内容是**前端 URL**（`<app_origin>/checkin?t=<token>`），学生用任意相机扫开即进入已登录 portal 自动提交——web 优先，无需应用内扫码器。大屏页由前端拼 origin，API 只发 token。
+
+- token 格式：`e.<event_id>.<window>.<sig>`，`window = floor(unix/30)`（30 秒轮转），`sig = HMAC-SHA256(event.checkin_secret, event_id + "." + window)` hex 截取 32 位。校验容忍当前与上一个 window（±30s 宽限）。
+- `event.checkin_secret` 建活动时随机生成，不下发前端。
+- attendance 唯一约束 `unique(event_id, user_id)`，重复签到 409 `already_checked_in`。
+
+| 方法 | 路径 | 说明 |
+|---|---|---|
+| GET | `/events` | 登录可见。`{items: [{id, title, starts_at, ends_at, location, luma_id, checked_in}]}`（checked_in = 当前用户是否已签） |
+| POST | `/admin/events` | `{title, starts_at, ends_at, location, luma_id?}` |
+| PATCH | `/admin/events/:id` | 局部更新同上字段 |
+| GET | `/admin/events/:id/screen-token` | 大屏轮询用：`{token, expires_at}`（每 window 变化） |
+| GET | `/admin/events/:id/attendance` | 签到名单 `{items: [{user: {id, display_name}, member_no, checked_in_at, method}]}` |
+| POST | `/admin/events/:id/attendance` | 手动补录 `{user_id}`，method='manual'，写 audit_log |
+| POST | `/checkin` | `{token}`。active 成员；验签 + window + event 起止时间（前后各宽限 30 分钟）→ 写 attendance（method='qr'）→ `{event: {id, title}, checked_in_at}`。错误码：`invalid_token` / `token_expired` / `event_not_active` / `already_checked_in` |
+| GET | `/me/attendance` | 出勤记录 `{items: [{event: {id, title, starts_at}, checked_in_at, method}]}` |
+
+`GET /card` 的 `stats.attendance_count` 自此为真实计数。
+
+## 阶段三：论坛 / 墙
+
+- 直接发布（无草稿流），删除 = status 'removed'（软删，admin 或作者本人，写 audit_log）。comment 硬删（作者或 admin，写 audit_log）。active 成员才能发帖/评论；浏览仅需登录。
+- `excerpt` = body_md 前 120 字符（服务端截取，去 markdown 标记可粗糙）。
+
+| 方法 | 路径 | 说明 |
+|---|---|---|
+| GET | `/posts?kind=&cursor=&limit=` | published 列表倒序：`{items: [{id, kind, title, excerpt, author: {id, display_name}, comment_count, created_at}], next_cursor}` |
+| GET | `/posts/:id` | 详情：`{id, kind, title, body_md, author, created_at, comments: [{id, body, author: {id, display_name}, created_at}]}` |
+| POST | `/posts` | `{kind: 'wall'\|'article', title, body_md}` |
+| POST | `/posts/:id/comments` | `{body}` |
+| DELETE | `/posts/:id` | 作者或 admin |
+| DELETE | `/comments/:id` | 作者或 admin |
+
+## 阶段三：title 与 cert（全手工授予）
+
+- schema 增量：`user` 表加 `worn_user_title_id`（佩戴指针，可空）。卡片 title = 佩戴的；未佩戴则取最新授予；一个都没有则 null。
+- cert 必须挂 event（schema 即如此），serial 格式 `XSIA-<term>-<5 位随机大写字母数字>`，唯一。
+
+| 方法 | 路径 | 说明 |
+|---|---|---|
+| GET | `/titles` | title 定义列表 `{items: [{id, name}]}`（登录可见） |
+| POST | `/admin/titles` | `{name}`（rule_json 留空） |
+| POST | `/admin/users/:uid/titles` | 授予 `{title_def_id}` → user_title，写 audit_log |
+| GET | `/me/titles` | `{items: [{id, name, granted_at, worn}]}`（id 为 user_title id） |
+| PUT | `/me/worn-title` | `{user_title_id: string \| null}`（null = 取消佩戴，回落最新） |
+| POST | `/admin/users/:uid/certificates` | `{event_id}` → 签发，返回 `{id, serial}`，写 audit_log |
+| GET | `/me/certificates` | `{items: [{id, serial, event: {id, title}, issued_at}]}` |
+| GET | `/verify/:serial` | **无需登录**：`{valid: true, holder_display_name, event_title, issued_at}`；不存在 → 404 `{valid: false}` 语义由 404 表达 |
+
 ## Seed（本地开发）
 
 `pnpm --filter api seed`：创建 org `x-sia`、admin 账号 `admin@x-sia.test / admin1234`（含 admin entitlement、active、member_no 26001）、普通测试账号 `member@x-sia.test / member1234`（active、26002）、一个 applied 状态账号。
+
+阶段三追加：一场进行中的活动（起止时间覆盖当前时刻，便于本地测签到）+ 一场未来活动、2 条 wall 帖 + 1 条 article（member 作者，带 1–2 条评论）、2 个 title 定义（其中一个已授予 member 并佩戴）、给 member 签发 1 张挂在活动上的 cert。
