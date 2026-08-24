@@ -1,21 +1,20 @@
-import { Link, Stack } from 'expo-router';
-import { StyleSheet } from 'react-native';
+import { Link, Stack } from 'expo-router'
+import { StyleSheet, Text, View } from 'react-native'
 
-import { Text, View } from '@/components/Themed';
+import { colors, fontFamily, spacing } from '@/constants/theme'
 
 export default function NotFoundScreen() {
   return (
     <>
-      <Stack.Screen options={{ title: 'Oops!' }} />
+      <Stack.Screen options={{ title: '页面不存在' }} />
       <View style={styles.container}>
-        <Text style={styles.title}>This screen doesn't exist.</Text>
-
+        <Text style={styles.title}>这个页面不存在</Text>
         <Link href="/" style={styles.link}>
-          <Text style={styles.linkText}>Go to home screen!</Text>
+          <Text style={styles.linkText}>返回首页</Text>
         </Link>
       </View>
     </>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -23,18 +22,23 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
+    padding: spacing.lg,
+    backgroundColor: colors.paper,
+    gap: spacing.md,
   },
   title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 18,
+    fontWeight: '700',
+    color: colors.text,
+    fontFamily: fontFamily.sans,
   },
   link: {
-    marginTop: 15,
-    paddingVertical: 15,
+    paddingVertical: spacing.sm,
   },
   linkText: {
     fontSize: 14,
-    color: '#2e78b7',
+    color: colors.link,
+    fontFamily: fontFamily.sans,
+    fontWeight: '600',
   },
-});
+})
