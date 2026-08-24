@@ -99,7 +99,7 @@ api 与 app 两端共同遵守本文件。改动契约必须先改本文件再�
 | GET | `/admin/events/:id/screen-token` | 大屏轮询用：`{token, expires_at}`（每 window 变化） |
 | GET | `/admin/events/:id/attendance` | 签到名单 `{items: [{user: {id, display_name}, member_no, checked_in_at, method}]}` |
 | POST | `/admin/events/:id/attendance` | 手动补录 `{user_id}`，method='manual'，写 audit_log |
-| POST | `/checkin` | `{token}`。active 成员；验签 + window + event 起止时间（前后各宽限 30 分钟）→ 写 attendance（method='qr'）→ `{event: {id, title}, checked_in_at}`。错误码：`invalid_token` / `token_expired` / `event_not_active` / `already_checked_in` |
+| POST | `/checkin` | `{token}`。active 成员；验签 + window + event 起止时间（前后各宽限 30 分钟）→ 写 attendance（method='qr'）→ `{event: {id, title}, checked_in_at}`。错误码（已定 HTTP 状态）：`invalid_token`/`token_expired` → 400，`event_not_active` → 403，`already_checked_in` → 409 |
 | GET | `/me/attendance` | 出勤记录 `{items: [{event: {id, title, starts_at}, checked_in_at, method}]}` |
 
 `GET /card` 的 `stats.attendance_count` 自此为真实计数。
@@ -120,8 +120,16 @@ api 与 app 两端共同遵守本文件。改动契约必须先改本文件再�
 
 ## 阶段三：title 与 cert（全手工授予）
 
-- schema 增量：`user` 表加 `worn_user_title_id`（佩戴指针，可空）。卡片 title = 佩戴的；未佩戴则取最新授予；一个都没有则 null。
-- cert 必须挂 event（schema 即如此），serial 格式 `XSIA-<term>-<5 位随机大写字母数字>`，唯一。
+- schema 增量：`user` 表加 `worn_user_title_id`（佩戴指针，可空，唯一佩戴事实来源）。卡片 title = 佩戴的；未佩戴则取最新授予；一个都没有则 null。
+- cert 必须挂 event（schema 即如此），serial 格式 `XSIA-<term>-<5 位随机大写字母数字>`，唯一。**`<term>` 取活动 `starts_at` 的年份**（证书是对那场活动的证明，跨年补发不改变归属），不是签发时年份。
+- 已软删的帖子：作者本人或 admin 可见详情，其他人一律 404（不区分「不存在」与「无权查看」）。
+
+写操作响应形状（已钉死）：
+- `POST/PATCH /admin/events` → `{id, title, starts_at, ends_at, location, luma_id, created_at}`（不含 checkin_secret / checked_in）
+- `POST /admin/events/:id/attendance` → `{checked_in_at, method}`
+- `POST /admin/titles` → `{id, name}`
+- `POST /admin/users/:uid/titles` → `{id, name, granted_at, worn}`
+- `PUT /me/worn-title` → `{worn_user_title_id}`（回显存入的指针原值，null 即 null）
 
 | 方法 | 路径 | 说明 |
 |---|---|---|
