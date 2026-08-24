@@ -26,6 +26,10 @@ export default {
       paths.push(`/blog/${entry.replace(/\.mdx$/, '')}`)
     }
 
+    // Renders the `*` catch-all route (routes/not-found.tsx) to `/404/index.html`;
+    // the postbuild step in package.json flattens it to `/404.html` for CF Pages.
+    paths.push('/404')
+
     return paths
   },
 } satisfies Config

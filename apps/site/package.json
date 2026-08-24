@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "react-router build",
+    "build": "react-router build && node -e \"require('node:fs').copyFileSync('build/client/404/index.html','build/client/404.html')\"",
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
     "types:check": "react-router typegen && tsc --noEmit"
