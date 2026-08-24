@@ -1,6 +1,7 @@
-import { eq } from 'drizzle-orm'
+import { and, count, eq } from 'drizzle-orm'
 import { Hono } from 'hono'
-import { user } from '../db/schema'
+import type { Database } from '../db/client'
+import { attendance, user } from '../db/schema'
 import { Errors } from '../lib/errors'
 import { getLatestMembership } from '../lib/membership'
 import { buildQuota } from '../lib/serialize'
@@ -9,6 +10,14 @@ import { requireAuth } from '../middleware/auth'
 import type { AppEnv } from '../types'
 
 export const publicRoutes = new Hono<AppEnv>()
+
+async function getAttendanceCount(db: Database, orgId: string, userId: string): Promise<number> {
+  const [row] = await db
+    .select({ total: count() })
+    .from(attendance)
+    .where(and(eq(attendance.orgId, orgId), eq(attendance.userId, userId)))
+  return row?.total ?? 0
+}
 
 publicRoutes.get('/users/:id/public', async (c) => {
   const db = c.get('db')
@@ -39,10 +48,11 @@ publicRoutes.get('/card', requireAuth, async (c) => {
   const org = c.get('org')
   const currentUser = c.get('user')
 
-  const [membershipRow, title, quota] = await Promise.all([
+  const [membershipRow, title, quota, attendanceCount] = await Promise.all([
     getLatestMembership(db, org.id, currentUser.id),
     getWornTitleName(db, org.id, currentUser.id),
     buildQuota(db, org.id, currentUser.id),
+    getAttendanceCount(db, org.id, currentUser.id),
   ])
 
   const quotaPct =
@@ -56,8 +66,7 @@ publicRoutes.get('/card', requireAuth, async (c) => {
     term: membershipRow?.term ?? null,
     title,
     stats: {
-      // 活动签到（§9 阶段三）本轮未实现，契约要求先占位为 0。
-      attendance_count: 0,
+      attendance_count: attendanceCount,
       quota_pct: quotaPct,
     },
     qr_payload: `/u/${currentUser.id}`,

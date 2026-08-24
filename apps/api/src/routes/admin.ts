@@ -1,8 +1,8 @@
 import { and, desc, eq, like, lt, or } from 'drizzle-orm'
 import { Hono } from 'hono'
 import { auditLog, membership, user } from '../db/schema'
-import { AppError } from '../lib/errors'
 import { confirmGroup, confirmPaid, findMembership, verifyMembership } from '../lib/membership'
+import { decodeCursor, encodeCursor } from '../lib/pagination'
 import { serializeMembership } from '../lib/serialize'
 import { requireAdmin, requireAuth } from '../middleware/auth'
 import type { AuthedEnv } from '../types'
@@ -80,23 +80,6 @@ adminRoutes.post('/admin/members/:mid/confirm-group', async (c) => {
   const updated = await confirmGroup(db, row, c.get('user').id)
   return c.json({ membership: serializeMembership(updated) })
 })
-
-type Cursor = { createdAt: string; id: string }
-
-function decodeCursor(raw: string | undefined): Cursor | null {
-  if (!raw) return null
-  try {
-    const parsed = JSON.parse(atob(raw))
-    if (typeof parsed.createdAt === 'string' && typeof parsed.id === 'string') return parsed
-    return null
-  } catch {
-    throw new AppError(400, 'bad_request', 'cursor 不合法')
-  }
-}
-
-function encodeCursor(c: Cursor): string {
-  return btoa(JSON.stringify(c))
-}
 
 const PAGE_SIZE = 50
 

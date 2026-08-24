@@ -1,3 +1,4 @@
+import type { AnySQLiteColumn } from 'drizzle-orm/sqlite-core'
 import { index, integer, sqliteTable, text, unique } from 'drizzle-orm/sqlite-core'
 
 // 所有时间戳存 ISO 8601 UTC 字符串（与 api-contract.md 输出格式一致），不用 SQLite 的
@@ -25,6 +26,9 @@ export const user = sqliteTable('user', {
   emailVerifiedAt: text('email_verified_at'),
   verifiedBy: text('verified_by', { enum: ['self', 'manual'] }),
   createdAt: text('created_at').notNull(),
+  // 佩戴指针：卡片/公开页展示这一条；为空则回落到 granted_at 最新的一条，都没有则 null。
+  // 只用 AnySQLiteColumn 延迟解析，因为 user_title 反过来引用 user，两表互相引用。
+  wornUserTitleId: text('worn_user_title_id').references((): AnySQLiteColumn => userTitle.id),
 })
 
 export const session = sqliteTable('session', {
@@ -116,37 +120,45 @@ export const aiUsage = sqliteTable(
   ],
 )
 
-export const post = sqliteTable('post', {
-  id: text('id').primaryKey(),
-  orgId: text('org_id')
-    .notNull()
-    .references(() => org.id),
-  authorId: text('author_id')
-    .notNull()
-    .references(() => user.id),
-  kind: text('kind', { enum: ['wall', 'article'] }).notNull(),
-  title: text('title'),
-  bodyMd: text('body_md').notNull(),
-  status: text('status', { enum: ['draft', 'published', 'removed'] })
-    .notNull()
-    .default('draft'),
-  createdAt: text('created_at').notNull(),
-})
+export const post = sqliteTable(
+  'post',
+  {
+    id: text('id').primaryKey(),
+    orgId: text('org_id')
+      .notNull()
+      .references(() => org.id),
+    authorId: text('author_id')
+      .notNull()
+      .references(() => user.id),
+    kind: text('kind', { enum: ['wall', 'article'] }).notNull(),
+    title: text('title'),
+    bodyMd: text('body_md').notNull(),
+    status: text('status', { enum: ['draft', 'published', 'removed'] })
+      .notNull()
+      .default('draft'),
+    createdAt: text('created_at').notNull(),
+  },
+  (t) => [index('post_org_status_created_idx').on(t.orgId, t.status, t.createdAt)],
+)
 
-export const comment = sqliteTable('comment', {
-  id: text('id').primaryKey(),
-  orgId: text('org_id')
-    .notNull()
-    .references(() => org.id),
-  postId: text('post_id')
-    .notNull()
-    .references(() => post.id),
-  authorId: text('author_id')
-    .notNull()
-    .references(() => user.id),
-  body: text('body').notNull(),
-  createdAt: text('created_at').notNull(),
-})
+export const comment = sqliteTable(
+  'comment',
+  {
+    id: text('id').primaryKey(),
+    orgId: text('org_id')
+      .notNull()
+      .references(() => org.id),
+    postId: text('post_id')
+      .notNull()
+      .references(() => post.id),
+    authorId: text('author_id')
+      .notNull()
+      .references(() => user.id),
+    body: text('body').notNull(),
+    createdAt: text('created_at').notNull(),
+  },
+  (t) => [index('comment_post_created_idx').on(t.postId, t.createdAt)],
+)
 
 export const resource = sqliteTable('resource', {
   id: text('id').primaryKey(),
@@ -167,21 +179,26 @@ export const resource = sqliteTable('resource', {
   createdAt: text('created_at').notNull(),
 })
 
-export const event = sqliteTable('event', {
-  id: text('id').primaryKey(),
-  orgId: text('org_id')
-    .notNull()
-    .references(() => org.id),
-  title: text('title').notNull(),
-  startsAt: text('starts_at').notNull(),
-  endsAt: text('ends_at').notNull(),
-  location: text('location'),
-  // 签到二维码轮转密钥：HMAC(checkin_secret, event_id + time_window)。
-  checkinSecret: text('checkin_secret').notNull(),
-  // Luma 仅作对外报名层的人工关联指针，权益相关出勤只认自家签到。
-  lumaId: text('luma_id'),
-  createdAt: text('created_at').notNull(),
-})
+export const event = sqliteTable(
+  'event',
+  {
+    id: text('id').primaryKey(),
+    orgId: text('org_id')
+      .notNull()
+      .references(() => org.id),
+    title: text('title').notNull(),
+    startsAt: text('starts_at').notNull(),
+    endsAt: text('ends_at').notNull(),
+    location: text('location'),
+    // 签到二维码轮转密钥：HMAC(checkin_secret, event_id + time_window)，建活动时随机生成，
+    // 任何端点都不下发给前端。
+    checkinSecret: text('checkin_secret').notNull(),
+    // Luma 仅作对外报名层的人工关联指针，权益相关出勤只认自家签到。
+    lumaId: text('luma_id'),
+    createdAt: text('created_at').notNull(),
+  },
+  (t) => [index('event_org_starts_idx').on(t.orgId, t.startsAt)],
+)
 
 export const attendance = sqliteTable(
   'attendance',
@@ -212,6 +229,8 @@ export const titleDef = sqliteTable('title_def', {
   ruleJson: text('rule_json'),
 })
 
+// 「佩戴」状态存在 user.worn_user_title_id 指针上，这张表本身不记录是否佩戴——
+// 一人一条有效的佩戴记录，放指针上比每行一个 is_worn 布尔值更不容易出现多条同时为 true。
 export const userTitle = sqliteTable(
   'user_title',
   {
@@ -226,25 +245,30 @@ export const userTitle = sqliteTable(
       .notNull()
       .references(() => titleDef.id),
     grantedAt: text('granted_at').notNull(),
-    // 成员选一个「佩戴」上卡；未显式选择时默认取 granted_at 最新的一条。
-    isWorn: integer('is_worn', { mode: 'boolean' }).notNull().default(false),
   },
   (t) => [index('user_title_org_user_idx').on(t.orgId, t.userId)],
 )
 
-export const certificate = sqliteTable('certificate', {
-  id: text('id').primaryKey(),
-  orgId: text('org_id')
-    .notNull()
-    .references(() => org.id),
-  userId: text('user_id')
-    .notNull()
-    .references(() => user.id),
-  eventId: text('event_id').references(() => event.id),
-  // 走 /verify/:serial 公开可查链接。
-  serial: text('serial').notNull().unique(),
-  issuedAt: text('issued_at').notNull(),
-})
+export const certificate = sqliteTable(
+  'certificate',
+  {
+    id: text('id').primaryKey(),
+    orgId: text('org_id')
+      .notNull()
+      .references(() => org.id),
+    userId: text('user_id')
+      .notNull()
+      .references(() => user.id),
+    // cert 必须挂活动，不允许脱离 event 单独签发。
+    eventId: text('event_id')
+      .notNull()
+      .references(() => event.id),
+    // 格式 XSIA-<term>-<5 位随机大写字母数字>，走 /verify/:serial 公开可查链接。
+    serial: text('serial').notNull().unique(),
+    issuedAt: text('issued_at').notNull(),
+  },
+  (t) => [index('certificate_org_user_idx').on(t.orgId, t.userId)],
+)
 
 export const auditLog = sqliteTable(
   'audit_log',

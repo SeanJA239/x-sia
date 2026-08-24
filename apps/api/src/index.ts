@@ -6,8 +6,11 @@ import { adminRoutes } from './routes/admin'
 import { aiRoutes } from './routes/ai'
 import { authRoutes } from './routes/auth'
 import { entitlementRoutes } from './routes/entitlements'
+import { eventRoutes } from './routes/events'
+import { postRoutes } from './routes/posts'
 import { publicRoutes } from './routes/public'
 import { resourceRoutes } from './routes/resources'
+import { titleRoutes } from './routes/titles'
 import type { AppEnv } from './types'
 
 const localOriginPattern = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/
@@ -41,6 +44,9 @@ api.route('/', entitlementRoutes)
 api.route('/', aiRoutes)
 api.route('/', resourceRoutes)
 api.route('/', publicRoutes)
+api.route('/', eventRoutes)
+api.route('/', postRoutes)
+api.route('/', titleRoutes)
 
 app.route('/api/v1', api)
 

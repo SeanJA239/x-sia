@@ -1,7 +1,7 @@
 import { env } from 'cloudflare:test'
 import { eq } from 'drizzle-orm'
 import { createDb } from '../src/db/client'
-import { entitlement, membership, org, user } from '../src/db/schema'
+import { entitlement, event, membership, org, user } from '../src/db/schema'
 import { hashPassword } from '../src/lib/crypto'
 import { newId } from '../src/lib/id'
 import { createSession } from '../src/lib/session'
@@ -75,4 +75,27 @@ export async function grantAdmin(orgId: string, userId: string) {
 
 export async function sessionTokenFor(userId: string) {
   return createSession(db(), userId)
+}
+
+export async function createEvent(opts: {
+  orgId: string
+  checkinSecret?: string
+  startsAt?: string
+  endsAt?: string
+}) {
+  const database = db()
+  const now = new Date()
+  const id = newId()
+  await database.insert(event).values({
+    id,
+    orgId: opts.orgId,
+    title: `测试活动 ${id}`,
+    startsAt: opts.startsAt ?? new Date(now.getTime() - 60 * 60 * 1000).toISOString(),
+    endsAt: opts.endsAt ?? new Date(now.getTime() + 60 * 60 * 1000).toISOString(),
+    location: null,
+    checkinSecret: opts.checkinSecret ?? 'test-checkin-secret',
+    lumaId: null,
+    createdAt: now.toISOString(),
+  })
+  return id
 }
