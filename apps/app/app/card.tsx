@@ -23,6 +23,8 @@ export default function CardScreen() {
         onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))}
         style={[styles.closeButton, { top: insets.top + spacing.sm }]}
         hitSlop={12}
+        accessibilityRole="button"
+        accessibilityLabel="关闭"
       >
         <Feather name="x" size={20} color={darkColors.text} />
       </Pressable>

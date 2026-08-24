@@ -78,7 +78,12 @@ export default function ResourcesScreen() {
                   <Text style={styles.metaText}>· {item.uploader.display_name}</Text>
                 </View>
               </View>
-              <Pressable onPress={() => onDownload(item)} style={styles.downloadButton}>
+              <Pressable
+                onPress={() => onDownload(item)}
+                style={styles.downloadButton}
+                accessibilityRole="button"
+                accessibilityLabel={`下载 ${item.title}`}
+              >
                 <Feather name="download" size={16} color={colors.text} />
               </Pressable>
             </Surface>

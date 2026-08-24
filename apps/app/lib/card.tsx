@@ -11,6 +11,7 @@ import {
 import { ApiError, api } from './api'
 import { useAuth } from './auth'
 import type { CardData } from './types'
+import { toAbsoluteUrl } from './url'
 
 type CardState =
   | { status: 'idle' }
@@ -37,7 +38,7 @@ export function CardProvider({ children }: { children: ReactNode }) {
     setState({ status: 'loading' })
     try {
       const data = await api.getCard()
-      setState({ status: 'ready', data })
+      setState({ status: 'ready', data: { ...data, qr_payload: toAbsoluteUrl(data.qr_payload) } })
     } catch (err) {
       const message = err instanceof ApiError ? err.message : '加载卡片数据失败。'
       setState({ status: 'error', message })
