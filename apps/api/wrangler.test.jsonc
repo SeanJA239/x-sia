@@ -1,0 +1,28 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "x-sia-api-test",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-22",
+  "vars": {
+    "SIGN_SECRET": "test-sign-secret"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "x-sia-db",
+      "database_id": "TODO",
+      "migrations_dir": "./migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "BUCKET",
+      "bucket_name": "x-sia-res"
+    }
+  ]
+  // 有意省略 "ai"：Workers AI 绑定即使在本地/测试也总是连真实的 Cloudflare 账号
+  // （无本地模拟），vitest-pool-workers 启动 worker 时会为它建立远程代理会话，
+  // 在没有 CLOUDFLARE_API_TOKEN 的沙箱环境里直接卡死/失败，导致整个测试进程起不来。
+  // 省略后 c.env.AI 在测试里是 undefined——只影响真正调用模型的那条路径（本轮标记为
+  // 跳过，见 test/ai.spec.ts），配额/熔断等在调用 AI 之前就短路返回的分支不受影响。
+}

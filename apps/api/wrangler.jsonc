@@ -1,0 +1,36 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "x-sia-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-22",
+  "observability": {
+    "enabled": true
+  },
+  "vars": {
+    // 占位空字符串仅用于生成类型（`wrangler types`）。真实值：本地开发在 .dev.vars
+    // 里覆盖，线上用 `wrangler secret put SIGN_SECRET`（secret 覆盖同名 var）。
+    // 应用启动时会校验非空，缺失直接报错，不做静默降级。
+    "SIGN_SECRET": ""
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "x-sia-db",
+      // Real database_id is provisioned per environment (`wrangler d1 create x-sia-db`)
+      // and injected via `wrangler deploy --var` or a named env block before first deploy.
+      // Local dev never reads this value — `wrangler dev`/d1 migrations always target
+      // the `--local` SQLite simulation.
+      "database_id": "TODO",
+      "migrations_dir": "./migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "BUCKET",
+      "bucket_name": "x-sia-res"
+    }
+  ],
+  "ai": {
+    "binding": "AI"
+  }
+}

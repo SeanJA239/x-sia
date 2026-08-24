@@ -1,0 +1,3 @@
+# wrangler 生成物，跑 `wrangler types` / `wrangler dev` 后自动产出，不进版本控制。
+worker-configuration.d.ts
+.wrangler/
