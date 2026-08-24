@@ -27,6 +27,34 @@ async function createPost(
 }
 
 describe('posts and comments', () => {
+  it('POST /posts and POST /posts/:id/comments return the contract-specified shapes', async () => {
+    const email = `post-shape-${crypto.randomUUID()}@t.com`
+    const { userId } = await createTestUser({ email, status: 'active' })
+    const token = await sessionTokenFor(userId)
+
+    const { res, json } = await createPost(token, {
+      kind: 'wall',
+      title: '形状测试',
+      body_md: '正文内容',
+    })
+    expect(res.status).toBe(201)
+    const post = json as unknown as Record<string, unknown>
+    expect(Object.keys(post).sort()).toEqual(
+      ['id', 'kind', 'title', 'body_md', 'author', 'created_at'].sort(),
+    )
+    expect(post.author).toEqual({ id: userId, display_name: email })
+
+    const commentRes = await app.request(
+      `/api/v1/posts/${json.id}/comments`,
+      authed(token, { method: 'POST', body: JSON.stringify({ body: '评论内容' }) }),
+      env,
+    )
+    expect(commentRes.status).toBe(201)
+    const comment = (await commentRes.json()) as Record<string, unknown>
+    expect(Object.keys(comment).sort()).toEqual(['id', 'body', 'author', 'created_at'].sort())
+    expect(comment.author).toEqual({ id: userId, display_name: email })
+  })
+
   it('rejects a non-active member from posting with 403', async () => {
     const { userId } = await createTestUser({ email: `post-inactive-${crypto.randomUUID()}@t.com` })
     const token = await sessionTokenFor(userId)

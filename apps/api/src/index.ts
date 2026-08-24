@@ -27,7 +27,10 @@ app.use(
 
 app.onError((err, c) => {
   if (err instanceof AppError) {
-    return c.json({ error: { code: err.code, message: err.message } }, err.status)
+    const body = err.details
+      ? { error: { code: err.code, message: err.message, details: err.details } }
+      : { error: { code: err.code, message: err.message } }
+    return c.json(body, err.status)
   }
   if (err instanceof SyntaxError) {
     return c.json({ error: { code: 'bad_request', message: '请求体不是合法 JSON' } }, 400)

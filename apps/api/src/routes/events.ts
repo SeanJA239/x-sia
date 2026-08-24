@@ -139,6 +139,13 @@ eventRoutes.patch('/admin/events/:id', requireAuth, requireAdmin, async (c) => {
   return c.json(serializeEvent(updated))
 })
 
+eventRoutes.get('/admin/events/:id', requireAuth, requireAdmin, async (c) => {
+  const db = c.get('db')
+  const org = c.get('org')
+  const row = await loadEvent(db, org.id, c.req.param('id'))
+  return c.json(serializeEvent(row))
+})
+
 eventRoutes.get('/admin/events/:id/screen-token', requireAuth, requireAdmin, async (c) => {
   const db = c.get('db')
   const org = c.get('org')
@@ -190,6 +197,11 @@ eventRoutes.post('/admin/events/:id/attendance', requireAuth, requireAdmin, asyn
   const org = c.get('org')
   const currentUser = c.get('user')
   const eventRow = await loadEvent(db, org.id, c.req.param('id'))
+
+  const targetMembership = await getLatestMembership(db, org.id, parsed.data.user_id)
+  if (targetMembership?.status !== 'active') {
+    throw new AppError(403, 'member_not_active', '该成员不是 active 状态，不能补录签到')
+  }
 
   const [existing] = await db
     .select({ id: attendance.id })
@@ -251,11 +263,15 @@ eventRoutes.post('/checkin', requireAuth, async (c) => {
   }
 
   const [existing] = await db
-    .select({ id: attendance.id })
+    .select({ id: attendance.id, checkedInAt: attendance.checkedInAt })
     .from(attendance)
     .where(and(eq(attendance.eventId, eventRow.id), eq(attendance.userId, currentUser.id)))
     .limit(1)
-  if (existing) throw Errors.conflict('already_checked_in', '你已经签到过了')
+  if (existing) {
+    throw Errors.conflict('already_checked_in', '你已经签到过了', {
+      checked_in_at: existing.checkedInAt,
+    })
+  }
 
   const now = new Date().toISOString()
   await db.insert(attendance).values({

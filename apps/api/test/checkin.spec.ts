@@ -131,11 +131,16 @@ describe('checkin end to end', () => {
 
     const checkinRes = await chat('/api/v1/checkin', memberToken, { token: checkinToken })
     expect(checkinRes.status).toBe(200)
+    const { checked_in_at: firstCheckedInAt } = (await checkinRes.json()) as {
+      checked_in_at: string
+    }
 
     const dupRes = await chat('/api/v1/checkin', memberToken, { token: checkinToken })
     expect(dupRes.status).toBe(409)
-    expect((await dupRes.json()) as { error: { code: string } }).toMatchObject({
-      error: { code: 'already_checked_in' },
+    expect(
+      (await dupRes.json()) as { error: { code: string; details: { checked_in_at: string } } },
+    ).toMatchObject({
+      error: { code: 'already_checked_in', details: { checked_in_at: firstCheckedInAt } },
     })
 
     const attendanceRes = await app.request(
@@ -210,5 +215,53 @@ describe('checkin end to end', () => {
     )
     const list = (await listRes.json()) as { items: { method: string; user: { id: string } }[] }
     expect(list.items.some((i) => i.user.id === targetId && i.method === 'manual')).toBe(true)
+  })
+
+  it('rejects manual back-fill for a non-active member with 403 member_not_active', async () => {
+    const { org, userId: adminId } = await createTestUser({
+      email: `manual-inactive-admin-${crypto.randomUUID()}@t.com`,
+    })
+    await grantAdmin(org.id, adminId)
+    const adminToken = await sessionTokenFor(adminId)
+
+    const { userId: targetId } = await createTestUser({
+      email: `manual-inactive-target-${crypto.randomUUID()}@t.com`,
+      status: 'applied',
+    })
+    const eventId = await createEvent({ orgId: org.id })
+
+    const res = await chat(`/api/v1/admin/events/${eventId}/attendance`, adminToken, {
+      user_id: targetId,
+    })
+    expect(res.status).toBe(403)
+    expect((await res.json()) as { error: { code: string } }).toMatchObject({
+      error: { code: 'member_not_active' },
+    })
+  })
+
+  it('GET /admin/events/:id returns the same shape as the create response', async () => {
+    const { org, userId: adminId } = await createTestUser({
+      email: `event-detail-admin-${crypto.randomUUID()}@t.com`,
+    })
+    await grantAdmin(org.id, adminId)
+    const adminToken = await sessionTokenFor(adminId)
+
+    const createRes = await chat('/api/v1/admin/events', adminToken, {
+      title: '详情测试活动',
+      starts_at: '2026-01-01T10:00:00.000Z',
+      ends_at: '2026-01-01T12:00:00.000Z',
+      location: '测试地点',
+    })
+    expect(createRes.status).toBe(201)
+    const created = (await createRes.json()) as { id: string }
+
+    const detailRes = await app.request(
+      `/api/v1/admin/events/${created.id}`,
+      { headers: { Authorization: `Bearer ${adminToken}` } },
+      env,
+    )
+    expect(detailRes.status).toBe(200)
+    const detail = await detailRes.json()
+    expect(detail).toEqual(created)
   })
 })
