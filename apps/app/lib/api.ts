@@ -8,6 +8,7 @@ import type {
   ChatResponse,
   CheckinResult,
   EntitlementsResponse,
+  EventAdminDetail,
   EventAttendanceItem,
   EventInput,
   EventItem,
@@ -18,11 +19,13 @@ import type {
   PostKind,
   PostsResponse,
   PublicUser,
+  RecordAttendanceResult,
   ResourceItem,
   ScreenToken,
   TitleDef,
   User,
   VerifyResult,
+  WornTitleResult,
 } from './types'
 
 const API_BASE = (process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:8787').replace(/\/$/, '')
@@ -220,8 +223,11 @@ export const api = {
     return request<{ items: MyTitle[] }>('/me/titles')
   },
 
-  setWornTitle(userTitleId: string | null): Promise<void> {
-    return request<void>('/me/worn-title', { method: 'PUT', body: { user_title_id: userTitleId } })
+  setWornTitle(userTitleId: string | null): Promise<WornTitleResult> {
+    return request<WornTitleResult>('/me/worn-title', {
+      method: 'PUT',
+      body: { user_title_id: userTitleId },
+    })
   },
 
   getMyCertificates(): Promise<{ items: Certificate[] }> {
@@ -254,11 +260,14 @@ export const api = {
       return request<{ items: AuditEntry[]; cursor?: string }>(`/admin/audit${suffix}`)
     },
 
-    createEvent(input: EventInput): Promise<EventItem> {
-      return request<EventItem>('/admin/events', { method: 'POST', body: input })
+    createEvent(input: EventInput): Promise<EventAdminDetail> {
+      return request<EventAdminDetail>('/admin/events', { method: 'POST', body: input })
     },
-    updateEvent(id: string, input: Partial<EventInput>): Promise<EventItem> {
-      return request<EventItem>(`/admin/events/${id}`, { method: 'PATCH', body: input })
+    updateEvent(id: string, input: Partial<EventInput>): Promise<EventAdminDetail> {
+      return request<EventAdminDetail>(`/admin/events/${id}`, { method: 'PATCH', body: input })
+    },
+    getEvent(id: string): Promise<EventAdminDetail> {
+      return request<EventAdminDetail>(`/admin/events/${id}`)
     },
     getScreenToken(id: string): Promise<ScreenToken> {
       return request<ScreenToken>(`/admin/events/${id}/screen-token`)
@@ -266,8 +275,8 @@ export const api = {
     getEventAttendance(id: string): Promise<{ items: EventAttendanceItem[] }> {
       return request<{ items: EventAttendanceItem[] }>(`/admin/events/${id}/attendance`)
     },
-    recordAttendance(id: string, userId: string): Promise<void> {
-      return request<void>(`/admin/events/${id}/attendance`, {
+    recordAttendance(id: string, userId: string): Promise<RecordAttendanceResult> {
+      return request<RecordAttendanceResult>(`/admin/events/${id}/attendance`, {
         method: 'POST',
         body: { user_id: userId },
       })
@@ -276,8 +285,8 @@ export const api = {
     createTitleDef(name: string): Promise<TitleDef> {
       return request<TitleDef>('/admin/titles', { method: 'POST', body: { name } })
     },
-    grantTitle(uid: string, titleDefId: string): Promise<void> {
-      return request<void>(`/admin/users/${uid}/titles`, {
+    grantTitle(uid: string, titleDefId: string): Promise<MyTitle> {
+      return request<MyTitle>(`/admin/users/${uid}/titles`, {
         method: 'POST',
         body: { title_def_id: titleDefId },
       })

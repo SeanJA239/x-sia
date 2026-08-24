@@ -4,7 +4,7 @@ import { StyleSheet, Text } from 'react-native'
 import { Button } from '@/components/ui/Button'
 import { TextField } from '@/components/ui/TextField'
 import { colors, fontFamily } from '@/constants/theme'
-import type { EventInput, EventItem } from '@/lib/types'
+import type { EventFields, EventInput } from '@/lib/types'
 
 /** datetime-local 输入转 ISO；输入非法时返回 null。 */
 function toIso(value: string): string | null {
@@ -25,7 +25,7 @@ export function EventForm({
   submitLabel,
   onSubmit,
 }: {
-  initial?: EventItem
+  initial?: EventFields
   submitLabel: string
   onSubmit: (input: EventInput) => Promise<void>
 }) {

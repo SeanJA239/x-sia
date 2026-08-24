@@ -1,6 +1,6 @@
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { StyleSheet, Text, TextInput, View } from 'react-native'
+import { Alert, StyleSheet, Text, TextInput, View } from 'react-native'
 
 import { AdminShell } from '@/components/AdminShell'
 import { EventForm } from '@/components/EventForm'
@@ -10,12 +10,12 @@ import { Surface } from '@/components/ui/Surface'
 import { colors, fontFamily, spacing } from '@/constants/theme'
 import { ApiError, api } from '@/lib/api'
 import { formatDateTime } from '@/lib/format'
-import type { AdminMember, EventAttendanceItem, EventItem } from '@/lib/types'
+import type { AdminMember, EventAdminDetail, EventAttendanceItem } from '@/lib/types'
 
 type LoadState =
   | { status: 'loading' }
   | { status: 'error'; message: string }
-  | { status: 'ready'; event: EventItem; attendance: EventAttendanceItem[] }
+  | { status: 'ready'; event: EventAdminDetail; attendance: EventAttendanceItem[] }
 
 export default function ManageEventScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
@@ -29,15 +29,10 @@ export default function ManageEventScreen() {
     if (!id) return
     setState({ status: 'loading' })
     try {
-      const [eventsRes, attendanceRes] = await Promise.all([
-        api.listEvents(),
+      const [event, attendanceRes] = await Promise.all([
+        api.admin.getEvent(id),
         api.admin.getEventAttendance(id),
       ])
-      const event = eventsRes.items.find((e) => e.id === id)
-      if (!event) {
-        setState({ status: 'error', message: '未找到该活动。' })
-        return
-      }
       setState({ status: 'ready', event, attendance: attendanceRes.items })
     } catch (err) {
       setState({
@@ -77,11 +72,11 @@ export default function ManageEventScreen() {
       setQuery('')
       await load()
     } catch (err) {
-      setState((prev) =>
-        prev.status === 'ready'
-          ? prev
-          : { status: 'error', message: err instanceof ApiError ? err.message : '补录失败。' },
-      )
+      if (err instanceof ApiError && err.code === 'member_not_active') {
+        Alert.alert('补录失败', '该成员当前不是在册状态，需先激活会员资格才能补录签到。')
+      } else {
+        Alert.alert('补录失败', err instanceof ApiError ? err.message : '请稍后重试。')
+      }
     } finally {
       setRecording(null)
     }

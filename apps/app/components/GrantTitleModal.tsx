@@ -33,9 +33,10 @@ export function GrantTitleModal({
   const grant = async (defId: string) => {
     setBusy(true)
     try {
-      await api.admin.grantTitle(member.user.id, defId)
+      const granted = await api.admin.grantTitle(member.user.id, defId)
       onGranted()
       onClose()
+      Alert.alert('授予成功', `已将「${granted.name}」授予 ${member.user.display_name}。`)
     } catch (err) {
       Alert.alert('授予失败', err instanceof ApiError ? err.message : '请稍后重试。')
     } finally {

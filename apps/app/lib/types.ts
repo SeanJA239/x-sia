@@ -117,14 +117,23 @@ export type AuditEntry = {
 
 // ---- 阶段三：活动与轮转码签到 ----
 
-export type EventItem = {
-  id: string
+export type EventFields = {
   title: string
   starts_at: string
   ends_at: string
   location: string
   luma_id: string | null
+}
+
+export type EventItem = EventFields & {
+  id: string
   checked_in: boolean
+}
+
+/** POST/PATCH/GET /admin/events(/:id) 的响应形状——不含 checkin_secret / checked_in。 */
+export type EventAdminDetail = EventFields & {
+  id: string
+  created_at: string
 }
 
 export type EventInput = {
@@ -143,6 +152,11 @@ export type ScreenToken = {
 export type EventAttendanceItem = {
   user: { id: string; display_name: string }
   member_no: number | null
+  checked_in_at: string
+  method: string
+}
+
+export type RecordAttendanceResult = {
   checked_in_at: string
   method: string
 }
@@ -226,4 +240,8 @@ export type VerifyResult = {
   holder_display_name: string
   event_title: string
   issued_at: string
+}
+
+export type WornTitleResult = {
+  worn_user_title_id: string | null
 }
