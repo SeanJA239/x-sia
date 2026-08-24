@@ -34,7 +34,8 @@ api 与 app 两端共同遵守本文件。改动契约必须先改本文件再�
 `applied → pending_payment → active`（`expired`/`revoked` 预留，`reviewing` 预留不用）。
 
 - admin「确认核验」：置 `email_verified_at`（verified_by `manual`），applied → pending_payment。
-- admin「确认缴费」：置 `paid_confirmed_at/_by`；若已核验 → active，并在**同一事务**内分配 member_no。
+- admin「确认缴费」：置 `paid_confirmed_at/_by`。
+- **激活对称触发**（已裁定）：核验与缴费两个动作不限先后，后完成的一方触发 → active，并在**同一事务**内分配 member_no。
 - member_no = 级 × 1000 + 顺序号（26 级第 1 位 = 26001）。级 = term 后两位。分配后永不变更，`unique(org_id, member_no)`。
 - 「确认进群」独立标记，不影响状态。
 - 所有 admin 动作写 audit_log（actor、action、target、meta）。
@@ -54,7 +55,14 @@ api 与 app 两端共同遵守本文件。改动契约必须先改本文件再�
 | 方法 | 路径 | 说明 |
 |---|---|---|
 | GET | `/users/:id/public` | 身份码落地页数据：`{display_name, avatar, member_no, term, status, title, joined_at}`。无需登录。 |
-| GET | `/card` | 卡片路由数据：`{display_name, member_no, term, title, stats: {attendance_count, quota_pct}, qr_payload}`。`qr_payload` = 指向 `/u/:id` 的 URL。 |
+| GET | `/card` | 卡片路由数据：`{display_name, member_no, term, title, stats: {attendance_count, quota_pct}, qr_payload}`。`qr_payload` 为**相对路径** `/u/:id`——API 不知道前端 origin，客户端渲染二维码时必须拼上自身 origin 成绝对 URL（否则扫码打不开）。 |
+
+## 已裁定的行为细节
+
+- **term 口径**：当前 UTC 自然年四位字符串（"2026"），级 = 后两位。春季招新是否按学年（9 月切换）归入上一级，开学前再定——切换点在 `src/lib/term.ts`。
+- **当前 membership 判定**：取该用户最新一行（避免续费断档期权限突然消失）；「未续费提醒」属后续迭代。
+- **entitlements 各端点只返回未撤销且未过期的**；历史记录展示属后续迭代。
+- **GET /resources 需登录**（平台默认除标注「无需登录」外全部认证），public 可见性只影响 active 门槛，不开放匿名列表。
 
 ## 权益与 AI 网关
 

@@ -1,12 +1,65 @@
-@import 'tailwindcss';
-@import 'fumadocs-ui/css/neutral.css';
-@import 'fumadocs-ui/css/preset.css';
+@import "tailwindcss";
+@import "fumadocs-ui/css/neutral.css";
+@import "fumadocs-ui/css/preset.css";
+
+/*
+ * X-SIA visual tone (docs/decisions.md): light paper, hairline dividers,
+ * near-monochrome text hierarchy, a black primary button, color reserved
+ * for function. Dark theme is intentionally out of scope for this site —
+ * it's reserved for the member card full-screen route in the app.
+ *
+ * Overrides plain `--color-fd-*` values (not Tailwind `@theme`, which this
+ * project's Biome config can't parse) so the fumadocs-registered `bg-fd-*` /
+ * `text-fd-*` utilities pick up the new palette without inventing new ones.
+ */
+:root {
+  --font-sans: "Geist", "Noto Sans SC", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-brand: "Archivo", "Noto Sans SC", ui-sans-serif, sans-serif;
+
+  --color-fd-background: #f5f5f6;
+  --color-fd-foreground: #161616;
+  --color-fd-card: #ffffff;
+  --color-fd-card-foreground: #161616;
+  --color-fd-popover: #ffffff;
+  --color-fd-popover-foreground: #161616;
+  --color-fd-muted: #efefef;
+  --color-fd-muted-foreground: #757575;
+  --color-fd-border: #e2e2e2;
+  --color-fd-primary: #171717;
+  --color-fd-primary-foreground: #fafafa;
+  --color-fd-secondary: #efefef;
+  --color-fd-secondary-foreground: #161616;
+  --color-fd-accent: #efefef;
+  --color-fd-accent-foreground: #161616;
+  --color-fd-ring: #9c9c9c;
+  --color-fd-info: #2f5eea;
+  --color-fd-success: #009756;
+  --color-fd-warning: #a05c00;
+}
+
+body {
+  font-family: var(--font-sans);
+}
+
+code,
+pre,
+kbd,
+samp {
+  font-family: var(--font-mono);
+}
+
+.font-brand {
+  font-family: var(--font-brand);
+}
 
 html {
   scrollbar-gutter: stable;
 }
 
 html > body[data-scroll-locked] {
+  /* biome-ignore lint/complexity/noImportantStyles: react-remove-scroll (via fumadocs-ui) sets this inline; !important is required to override it */
   margin-right: 0px !important;
+  /* biome-ignore lint/complexity/noImportantStyles: react-remove-scroll (via fumadocs-ui) sets this inline; !important is required to override it */
   --removed-body-scroll-bar-size: 0px !important;
 }

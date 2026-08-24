@@ -1,17 +1,10 @@
-import {
-  isRouteErrorResponse,
-  Links,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-} from 'react-router';
-import { RootProvider } from 'fumadocs-ui/provider/react-router';
-import type { Route } from './+types/root';
-import './app.css';
-import { isMarkdownPreferred, rewritePath } from 'fumadocs-core/negotiation';
-import NotFound from './routes/not-found';
-import { docsContentRoute, docsRoute } from '@/lib/shared';
+import { RootProvider } from 'fumadocs-ui/provider/react-router'
+import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router'
+import type { Route } from './+types/root'
+import './app.css'
+import { isMarkdownPreferred, rewritePath } from 'fumadocs-core/negotiation'
+import { appDescription, appName, docsContentRoute, docsRoute } from '@/lib/shared'
+import NotFound from './routes/not-found'
 
 export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -22,44 +15,52 @@ export const links: Route.LinksFunction = () => [
   },
   {
     rel: 'stylesheet',
-    href: 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap',
+    href: 'https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&family=Archivo:wght@800&display=swap',
   },
-];
+]
+
+export function meta(_: Route.MetaArgs) {
+  return [
+    { name: 'description', content: appDescription },
+    { property: 'og:site_name', content: appName },
+    { property: 'og:type', content: 'website' },
+  ]
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="zh-CN" suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
       </head>
-      <body className="flex flex-col min-h-screen">
-        <RootProvider>{children}</RootProvider>
+      <body className="flex flex-col min-h-screen bg-fd-background text-fd-foreground">
+        <RootProvider theme={{ enabled: false }}>{children}</RootProvider>
         <ScrollRestoration />
         <Scripts />
       </body>
     </html>
-  );
+  )
 }
 
 export default function App() {
-  return <Outlet />;
+  return <Outlet />
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-  let message = 'Oops!';
-  let details = 'An unexpected error occurred.';
-  let stack: string | undefined;
+  let message = 'Oops!'
+  let details = 'An unexpected error occurred.'
+  let stack: string | undefined
 
   if (isRouteErrorResponse(error)) {
-    if (error.status === 404) return <NotFound />;
-    message = 'Error';
-    details = error.statusText;
+    if (error.status === 404) return <NotFound />
+    message = 'Error'
+    details = error.statusText
   } else if (import.meta.env.DEV && error && error instanceof Error) {
-    details = error.message;
-    stack = error.stack;
+    details = error.message
+    stack = error.stack
   }
 
   return (
@@ -72,24 +73,24 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
         </pre>
       )}
     </main>
-  );
+  )
 }
 
 const { rewrite: rewriteDocs } = rewritePath(
   `${docsRoute}{/*path}`,
   `${docsContentRoute}{/*path}/content.md`,
-);
+)
 const { rewrite: rewriteSuffix } = rewritePath(
   `${docsRoute}{/*path}.md`,
   `${docsContentRoute}{/*path}/content.md`,
-);
+)
 const serverMiddleware: Route.MiddlewareFunction = async ({ request }, next) => {
-  const url = new URL(request.url);
-  const suffixPath = rewriteSuffix(url.pathname);
-  if (suffixPath) return Response.redirect(new URL(suffixPath, url));
+  const url = new URL(request.url)
+  const suffixPath = rewriteSuffix(url.pathname)
+  if (suffixPath) return Response.redirect(new URL(suffixPath, url))
 
   if (isMarkdownPreferred(request)) {
-    const docsPath = rewriteDocs(url.pathname);
+    const docsPath = rewriteDocs(url.pathname)
     // this URL has two representations selected by `Accept`, and the headers of
     // `Response.redirect()` are immutable, so build the response directly
     if (docsPath)
@@ -99,9 +100,9 @@ const serverMiddleware: Route.MiddlewareFunction = async ({ request }, next) => 
           Location: new URL(docsPath, url).toString(),
           Vary: 'Accept',
         },
-      });
+      })
   }
 
-  return next();
-};
-export const middleware = [serverMiddleware];
+  return next()
+}
+export const middleware = [serverMiddleware]

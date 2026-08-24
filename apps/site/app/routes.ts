@@ -1,8 +1,10 @@
-import { index, route, type RouteConfig } from '@react-router/dev/routes';
+import { index, type RouteConfig, route } from '@react-router/dev/routes'
 
 export default [
   index('routes/home.tsx'),
   route('docs/*', 'routes/docs.tsx'),
+  route('blog', 'routes/blog.tsx'),
+  route('blog/:slug', 'routes/blog.$slug.tsx'),
   route('api/search', 'routes/search.ts'),
   route('og/docs/*', 'routes/og.docs.tsx'),
 
@@ -12,4 +14,4 @@ export default [
   route('llms.mdx/docs/*', 'llms/mdx.ts'),
 
   route('*', 'routes/not-found.tsx'),
-] satisfies RouteConfig;
+] satisfies RouteConfig

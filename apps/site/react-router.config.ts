@@ -1,27 +1,31 @@
-import type { Config } from '@react-router/dev/config';
-import { glob } from 'node:fs/promises';
-import { createGetUrl, getSlugs } from 'fumadocs-core/source';
-import { getPageImagePath } from './app/lib/shared';
+import { glob } from 'node:fs/promises'
+import type { Config } from '@react-router/dev/config'
+import { createGetUrl, getSlugs } from 'fumadocs-core/source'
+import { getPageImagePath } from './app/lib/shared'
 
-const getUrl = createGetUrl('/docs');
+const getUrl = createGetUrl('/docs')
 
 export default {
   ssr: true,
   async prerender({ getStaticPaths }) {
-    const paths: string[] = [];
-    const excluded: string[] = ['/api/search'];
+    const paths: string[] = []
+    const excluded: string[] = ['/api/search']
 
     for (const path of getStaticPaths()) {
-      if (!excluded.includes(path)) paths.push(path);
+      if (!excluded.includes(path)) paths.push(path)
     }
 
     for await (const entry of glob('**/*.mdx', { cwd: 'content/docs' })) {
-      const slugs = getSlugs(entry);
+      const slugs = getSlugs(entry)
 
-      paths.push(getUrl(slugs));
-      paths.push(getPageImagePath(slugs));
+      paths.push(getUrl(slugs))
+      paths.push(getPageImagePath(slugs))
     }
 
-    return paths;
+    for await (const entry of glob('**/*.mdx', { cwd: 'content/blog' })) {
+      paths.push(`/blog/${entry.replace(/\.mdx$/, '')}`)
+    }
+
+    return paths
   },
-} satisfies Config;
+} satisfies Config
