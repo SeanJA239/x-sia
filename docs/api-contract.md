@@ -22,7 +22,10 @@ api 与 app 两端共同遵守本文件。改动契约必须先改本文件再�
 
 `user`: `{id, email, display_name, avatar, email_verified_at, verified_by}`
 `membership`: `{id, term, status, member_no, paid_confirmed_at, in_group_at, created_at}`
-`quota`: `{daily_limit, used_today, remaining}`（单位：估算 neurons）
+`entitlement`（所有端点统一此形状）: `{kind, tier, granted_at, expires_at}`
+`quota`（所有端点统一此形状）: `{daily_limit, used_today, remaining}`（单位：估算 neurons）
+
+`/me` 的 `entitlements` 即 `entitlement[]`，与 `/entitlements` 的 `items` 元素完全一致；前端以 `entitlements.some(e => e.kind === 'admin')` 判定 admin。
 
 密码：WebCrypto PBKDF2-SHA256，≥100k 迭代，存 `iterations:salt:hash`。
 
@@ -40,7 +43,7 @@ api 与 app 两端共同遵守本文件。改动契约必须先改本文件再�
 
 | 方法 | 路径 | 说明 |
 |---|---|---|
-| GET | `/admin/members?term=&q=` | 成员列表（含 email、双标记、状态、member_no） |
+| GET | `/admin/members?term=&q=` | 成员列表，`{items: AdminMember[]}`，元素形状（已钉死）：`{id, user: {id, email, display_name}, term, status, member_no, paid_confirmed_at, in_group_at, created_at}`（user 为嵌套对象，email 不扁平） |
 | POST | `/admin/members/:mid/verify` | 确认核验 |
 | POST | `/admin/members/:mid/confirm-paid` | 确认缴费（可能触发 active + 编号分配） |
 | POST | `/admin/members/:mid/confirm-group` | 确认进群 |
