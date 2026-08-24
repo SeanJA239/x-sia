@@ -1,6 +1,6 @@
 import { Feather } from '@expo/vector-icons'
 import { useCallback, useEffect, useState } from 'react'
-import { Alert, Linking, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Linking, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 
 import { AppScreen } from '@/components/AppScreen'
 import type { PickedFile } from '@/components/FilePicker'
@@ -12,6 +12,7 @@ import { Surface } from '@/components/ui/Surface'
 import { colors, fontFamily, radius, spacing } from '@/constants/theme'
 import { ApiError, api } from '@/lib/api'
 import { useAuth } from '@/lib/auth'
+import { useDialog } from '@/lib/dialog'
 import { formatFileSize, mimeLabel } from '@/lib/format'
 import type { ResourceItem } from '@/lib/types'
 
@@ -22,6 +23,7 @@ type LoadState =
 
 export default function ResourcesScreen() {
   const { state: authState } = useAuth()
+  const { alert } = useDialog()
   const [state, setState] = useState<LoadState>({ status: 'loading' })
   const isActiveMember = authState.status === 'signedIn' && authState.membership.status === 'active'
 
@@ -48,7 +50,7 @@ export default function ResourcesScreen() {
       await Linking.openURL(url)
     } catch (err) {
       const message = err instanceof ApiError ? err.message : '获取下载链接失败，请稍后重试。'
-      Alert.alert('下载失败', message)
+      alert({ title: '下载失败', body: message })
     }
   }
 

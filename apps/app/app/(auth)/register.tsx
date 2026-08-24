@@ -1,6 +1,6 @@
 import { Link } from 'expo-router'
 import { useState } from 'react'
-import { Alert, Pressable, StyleSheet, Text } from 'react-native'
+import { Pressable, StyleSheet, Text } from 'react-native'
 
 import { AuthShell } from '@/components/AuthShell'
 import { Button } from '@/components/ui/Button'
@@ -8,9 +8,11 @@ import { TextField } from '@/components/ui/TextField'
 import { colors, fontFamily } from '@/constants/theme'
 import { ApiError } from '@/lib/api'
 import { useAuth } from '@/lib/auth'
+import { useDialog } from '@/lib/dialog'
 
 export default function RegisterScreen() {
   const { register } = useAuth()
+  const { alert } = useDialog()
   const [displayName, setDisplayName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -30,7 +32,7 @@ export default function RegisterScreen() {
     setSubmitting(true)
     try {
       await register(email.trim(), password, displayName.trim())
-      Alert.alert('注册成功', '完成现场核验后即可开通，请留意社团工作人员的核实通知。')
+      alert({ title: '注册成功', body: '完成现场核验后即可开通，请留意社团工作人员的核实通知。' })
     } catch (err) {
       setError(err instanceof ApiError ? err.message : '注册失败，请稍后重试。')
     } finally {

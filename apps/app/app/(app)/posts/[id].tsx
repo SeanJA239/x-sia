@@ -1,6 +1,6 @@
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useCallback, useEffect, useState } from 'react'
-import { Alert, StyleSheet, Text, TextInput, View } from 'react-native'
+import { StyleSheet, Text, TextInput, View } from 'react-native'
 
 import { AppScreen } from '@/components/AppScreen'
 import { Button } from '@/components/ui/Button'
@@ -10,6 +10,7 @@ import { Surface } from '@/components/ui/Surface'
 import { colors, fontFamily, radius, spacing } from '@/constants/theme'
 import { ApiError, api } from '@/lib/api'
 import { useAuth } from '@/lib/auth'
+import { useDialog } from '@/lib/dialog'
 import { formatDateTime } from '@/lib/format'
 import type { PostDetail } from '@/lib/types'
 
@@ -22,6 +23,7 @@ export default function PostDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
   const router = useRouter()
   const { state: authState, isAdmin } = useAuth()
+  const { alert, confirm } = useDialog()
   const [state, setState] = useState<LoadState>({ status: 'loading' })
   const [comment, setComment] = useState('')
   const [posting, setPosting] = useState(false)
@@ -58,47 +60,43 @@ export default function PostDetailScreen() {
       setComment('')
       await load()
     } catch (err) {
-      Alert.alert('评论失败', err instanceof ApiError ? err.message : '请稍后重试。')
+      alert({ title: '评论失败', body: err instanceof ApiError ? err.message : '请稍后重试。' })
     } finally {
       setPosting(false)
     }
   }
 
-  const deletePost = () => {
+  const deletePost = async () => {
     if (!id) return
-    Alert.alert('删除帖子', '删除后不可恢复，确定继续吗？', [
-      { text: '取消', style: 'cancel' },
-      {
-        text: '删除',
-        style: 'destructive',
-        onPress: async () => {
-          try {
-            await api.deletePost(id)
-            router.replace('/posts')
-          } catch (err) {
-            Alert.alert('删除失败', err instanceof ApiError ? err.message : '请稍后重试。')
-          }
-        },
-      },
-    ])
+    const confirmed = await confirm({
+      title: '删除帖子',
+      body: '删除后不可恢复，确定继续吗？',
+      confirmLabel: '删除',
+      destructive: true,
+    })
+    if (!confirmed) return
+    try {
+      await api.deletePost(id)
+      router.replace('/posts')
+    } catch (err) {
+      alert({ title: '删除失败', body: err instanceof ApiError ? err.message : '请稍后重试。' })
+    }
   }
 
-  const deleteComment = (commentId: string) => {
-    Alert.alert('删除评论', '确定删除这条评论吗？', [
-      { text: '取消', style: 'cancel' },
-      {
-        text: '删除',
-        style: 'destructive',
-        onPress: async () => {
-          try {
-            await api.deleteComment(commentId)
-            await load()
-          } catch (err) {
-            Alert.alert('删除失败', err instanceof ApiError ? err.message : '请稍后重试。')
-          }
-        },
-      },
-    ])
+  const deleteComment = async (commentId: string) => {
+    const confirmed = await confirm({
+      title: '删除评论',
+      body: '确定删除这条评论吗？',
+      confirmLabel: '删除',
+      destructive: true,
+    })
+    if (!confirmed) return
+    try {
+      await api.deleteComment(commentId)
+      await load()
+    } catch (err) {
+      alert({ title: '删除失败', body: err instanceof ApiError ? err.message : '请稍后重试。' })
+    }
   }
 
   return (

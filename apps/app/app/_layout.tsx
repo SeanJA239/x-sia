@@ -6,16 +6,15 @@ import { ErrorState, LoadingState } from '@/components/ui/StateViews'
 import { colors } from '@/constants/theme'
 import { AuthProvider, useAuth } from '@/lib/auth'
 import { CardProvider } from '@/lib/card'
-
-export const unstable_settings = {
-  initialRouteName: '(auth)',
-}
+import { DialogProvider } from '@/lib/dialog'
 
 export default function RootLayout() {
   return (
     <AuthProvider>
-      <StatusBar style="dark" />
-      <RootLayoutNav />
+      <DialogProvider>
+        <StatusBar style="dark" />
+        <RootLayoutNav />
+      </DialogProvider>
     </AuthProvider>
   )
 }

@@ -31,16 +31,18 @@ import type {
 const API_BASE = (process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:8787').replace(/\/$/, '')
 const API_PREFIX = `${API_BASE}/api/v1`
 
-/** 服务端 `{error:{code,message}}` 的统一错误形态。code === 'network_error' 是客户端合成的，代表请求根本没有到达服务器。 */
+/** 服务端 `{error:{code,message,details?}}` 的统一错误形态。code === 'network_error' 是客户端合成的，代表请求根本没有到达服务器。 */
 export class ApiError extends Error {
   status: number
   code: string
+  details: unknown
 
-  constructor(status: number, code: string, message: string) {
+  constructor(status: number, code: string, message: string, details?: unknown) {
     super(message)
     this.name = 'ApiError'
     this.status = status
     this.code = code
+    this.details = details
   }
 }
 
@@ -78,11 +80,13 @@ async function request<T>(path: string, opts: RequestOptions = {}): Promise<T> {
   const json = text ? safeJson(text) : null
 
   if (!res.ok) {
-    const err = (json as { error?: { code?: string; message?: string } } | null)?.error
+    const err = (json as { error?: { code?: string; message?: string; details?: unknown } } | null)
+      ?.error
     throw new ApiError(
       res.status,
       err?.code ?? 'unknown_error',
       err?.message ?? `请求失败（HTTP ${res.status}）`,
+      err?.details,
     )
   }
 

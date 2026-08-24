@@ -15,16 +15,10 @@ import type { CheckinErrorCode } from '@/lib/types'
 type Result =
   | { kind: 'pending' }
   | { kind: 'success'; eventTitle: string; checkedInAt: string }
-  | { kind: 'already'; eventTitle: string; checkedInAt: string }
+  | { kind: 'already'; checkedInAt: string | null }
   | { kind: 'expired' }
   | { kind: 'error'; message: string }
   | { kind: 'missing-token' }
-
-/** token 格式 `e.<event_id>.<window>.<sig>`——event_id 是明文段，本地就能取到，不需要额外接口。 */
-function parseEventId(token: string): string | null {
-  const parts = token.split('.')
-  return parts.length >= 4 && parts[0] === 'e' ? parts[1] : null
-}
 
 export default function CheckinScreen() {
   const { t } = useLocalSearchParams<{ t?: string }>()
@@ -54,7 +48,7 @@ export default function CheckinScreen() {
       .then((res) => {
         setResult({ kind: 'success', eventTitle: res.event.title, checkedInAt: res.checked_in_at })
       })
-      .catch(async (err: unknown) => {
+      .catch((err: unknown) => {
         if (!(err instanceof ApiError)) {
           setResult({ kind: 'error', message: '签到失败，请稍后重试。' })
           return
@@ -65,22 +59,8 @@ export default function CheckinScreen() {
           return
         }
         if (code === 'already_checked_in') {
-          const eventId = parseEventId(t)
-          try {
-            const attendance = await api.getMyAttendance()
-            const match = attendance.items.find((a) => a.event.id === eventId)
-            if (match) {
-              setResult({
-                kind: 'already',
-                eventTitle: match.event.title,
-                checkedInAt: match.checked_in_at,
-              })
-              return
-            }
-          } catch {
-            // 查不到具体时间就退化为通用提示
-          }
-          setResult({ kind: 'already', eventTitle: '这场活动', checkedInAt: '' })
+          const details = err.details as { checked_in_at?: string } | undefined
+          setResult({ kind: 'already', checkedInAt: details?.checked_in_at ?? null })
           return
         }
         setResult({ kind: 'error', message: err.message })
@@ -112,8 +92,8 @@ export default function CheckinScreen() {
           title="你已经签到过了"
           body={
             result.checkedInAt
-              ? `${result.eventTitle} · 签到时间 ${formatDateTime(result.checkedInAt)}`
-              : `你已经为「${result.eventTitle}」签到过了。`
+              ? `签到时间 ${formatDateTime(result.checkedInAt)}`
+              : '你已经为这场活动签到过了。'
           }
         />
       ) : result.kind === 'success' ? (

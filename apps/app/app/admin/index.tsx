@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Alert, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 
 import { GrantTitleModal } from '@/components/GrantTitleModal'
 import { IssueCertificateModal } from '@/components/IssueCertificateModal'
@@ -9,6 +9,7 @@ import { ErrorState, LoadingState } from '@/components/ui/StateViews'
 import { Surface } from '@/components/ui/Surface'
 import { colors, fontFamily, radius, spacing } from '@/constants/theme'
 import { ApiError, api } from '@/lib/api'
+import { useDialog } from '@/lib/dialog'
 import type { AdminMember, MembershipStatus } from '@/lib/types'
 
 const STATUS_LABEL: Record<
@@ -29,6 +30,7 @@ type LoadState =
   | { status: 'ready'; items: AdminMember[] }
 
 export default function AdminScreen() {
+  const { alert } = useDialog()
   const [state, setState] = useState<LoadState>({ status: 'loading' })
   const [term, setTerm] = useState('')
   const [query, setQuery] = useState('')
@@ -71,7 +73,7 @@ export default function AdminScreen() {
       await load({ term: term.trim() || undefined, q: query.trim() || undefined })
     } catch (err) {
       const message = err instanceof ApiError ? err.message : '操作失败，请重试。'
-      Alert.alert('操作失败', message)
+      alert({ title: '操作失败', body: message })
     } finally {
       setPendingAction(null)
     }

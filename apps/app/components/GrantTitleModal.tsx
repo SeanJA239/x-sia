@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Alert, Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 
 import { Button } from '@/components/ui/Button'
 import { colors, fontFamily, radius, spacing } from '@/constants/theme'
 import { ApiError, api } from '@/lib/api'
+import { useDialog } from '@/lib/dialog'
 import type { AdminMember, TitleDef } from '@/lib/types'
 
 export function GrantTitleModal({
@@ -15,12 +16,15 @@ export function GrantTitleModal({
   onClose: () => void
   onGranted: () => void
 }) {
+  const { alert } = useDialog()
   const [titleDefs, setTitleDefs] = useState<TitleDef[]>([])
   const [newName, setNewName] = useState('')
   const [busy, setBusy] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     if (member) {
+      setError(null)
       api
         .listTitleDefs()
         .then((res) => setTitleDefs(res.items))
@@ -32,13 +36,20 @@ export function GrantTitleModal({
 
   const grant = async (defId: string) => {
     setBusy(true)
+    setError(null)
     try {
       const granted = await api.admin.grantTitle(member.user.id, defId)
       onGranted()
       onClose()
-      Alert.alert('授予成功', `已将「${granted.name}」授予 ${member.user.display_name}。`)
+      // 弹窗在这里才 alert：react-native-web 的 Modal 没有 zIndex，堆叠顺序按 DOM
+      // 挂载先后决定，DialogProvider 的弹窗在应用启动时就挂载了，若这个 modal 还开着，
+      // 它会盖在 alert 上面，导致「好的」按钮点不到——所以成功提示必须等 onClose() 之后。
+      alert({
+        title: '授予成功',
+        body: `已将「${granted.name}」授予 ${member.user.display_name}。`,
+      })
     } catch (err) {
-      Alert.alert('授予失败', err instanceof ApiError ? err.message : '请稍后重试。')
+      setError(err instanceof ApiError ? err.message : '授予失败，请稍后重试。')
     } finally {
       setBusy(false)
     }
@@ -47,12 +58,13 @@ export function GrantTitleModal({
   const createDef = async () => {
     if (!newName.trim()) return
     setBusy(true)
+    setError(null)
     try {
       const def = await api.admin.createTitleDef(newName.trim())
       setTitleDefs((prev) => [...prev, def])
       setNewName('')
     } catch (err) {
-      Alert.alert('创建失败', err instanceof ApiError ? err.message : '请稍后重试。')
+      setError(err instanceof ApiError ? err.message : '创建失败，请稍后重试。')
     } finally {
       setBusy(false)
     }
@@ -93,6 +105,7 @@ export function GrantTitleModal({
               style={styles.newButton}
             />
           </View>
+          {error ? <Text style={styles.errorText}>{error}</Text> : null}
           <Button title="取消" variant="ghost" onPress={onClose} />
         </View>
       </View>
@@ -126,6 +139,11 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 13,
     color: colors.textMuted,
+    fontFamily: fontFamily.sans,
+  },
+  errorText: {
+    fontSize: 13,
+    color: colors.danger,
     fontFamily: fontFamily.sans,
   },
   optionRow: {

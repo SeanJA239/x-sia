@@ -1,6 +1,6 @@
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Alert, StyleSheet, Text, TextInput, View } from 'react-native'
+import { StyleSheet, Text, TextInput, View } from 'react-native'
 
 import { AdminShell } from '@/components/AdminShell'
 import { EventForm } from '@/components/EventForm'
@@ -9,6 +9,7 @@ import { EmptyState, ErrorState, LoadingState } from '@/components/ui/StateViews
 import { Surface } from '@/components/ui/Surface'
 import { colors, fontFamily, spacing } from '@/constants/theme'
 import { ApiError, api } from '@/lib/api'
+import { useDialog } from '@/lib/dialog'
 import { formatDateTime } from '@/lib/format'
 import type { AdminMember, EventAdminDetail, EventAttendanceItem } from '@/lib/types'
 
@@ -20,6 +21,7 @@ type LoadState =
 export default function ManageEventScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
   const router = useRouter()
+  const { alert } = useDialog()
   const [state, setState] = useState<LoadState>({ status: 'loading' })
   const [members, setMembers] = useState<AdminMember[]>([])
   const [query, setQuery] = useState('')
@@ -73,9 +75,9 @@ export default function ManageEventScreen() {
       await load()
     } catch (err) {
       if (err instanceof ApiError && err.code === 'member_not_active') {
-        Alert.alert('补录失败', '该成员当前不是在册状态，需先激活会员资格才能补录签到。')
+        alert({ title: '补录失败', body: '该成员还未激活，先完成核验与缴费确认。' })
       } else {
-        Alert.alert('补录失败', err instanceof ApiError ? err.message : '请稍后重试。')
+        alert({ title: '补录失败', body: err instanceof ApiError ? err.message : '请稍后重试。' })
       }
     } finally {
       setRecording(null)

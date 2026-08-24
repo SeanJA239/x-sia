@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Alert, Modal, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Modal, Pressable, StyleSheet, Text, View } from 'react-native'
 
 import { Button } from '@/components/ui/Button'
 import { colors, fontFamily, radius, spacing } from '@/constants/theme'
 import { ApiError, api } from '@/lib/api'
+import { useDialog } from '@/lib/dialog'
 import { formatDateRange } from '@/lib/format'
 import type { AdminMember, EventItem } from '@/lib/types'
 
@@ -14,11 +15,14 @@ export function IssueCertificateModal({
   member: AdminMember | null
   onClose: () => void
 }) {
+  const { alert } = useDialog()
   const [events, setEvents] = useState<EventItem[]>([])
   const [busy, setBusy] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     if (member) {
+      setError(null)
       api
         .listEvents()
         .then((res) => setEvents(res.items))
@@ -30,12 +34,15 @@ export function IssueCertificateModal({
 
   const issue = async (event: EventItem) => {
     setBusy(true)
+    setError(null)
     try {
       const cert = await api.admin.issueCertificate(member.user.id, event.id)
-      Alert.alert('签发成功', `编号：${cert.serial}`)
       onClose()
+      // 见 GrantTitleModal 的同款注释：必须先 onClose() 再 alert()，
+      // 否则这个 modal 还开着会盖住 alert，按钮点不到。
+      alert({ title: '签发成功', body: `编号：${cert.serial}` })
     } catch (err) {
-      Alert.alert('签发失败', err instanceof ApiError ? err.message : '请稍后重试。')
+      setError(err instanceof ApiError ? err.message : '签发失败，请稍后重试。')
     } finally {
       setBusy(false)
     }
@@ -63,6 +70,7 @@ export function IssueCertificateModal({
               </Pressable>
             ))
           )}
+          {error ? <Text style={styles.errorText}>{error}</Text> : null}
           <Button title="取消" variant="ghost" onPress={onClose} />
         </View>
       </View>
@@ -96,6 +104,11 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 13,
     color: colors.textMuted,
+    fontFamily: fontFamily.sans,
+  },
+  errorText: {
+    fontSize: 13,
+    color: colors.danger,
     fontFamily: fontFamily.sans,
   },
   optionRow: {
