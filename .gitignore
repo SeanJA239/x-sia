@@ -1,0 +1,11 @@
+node_modules/
+dist/
+build/
+.expo/
+.wrangler/
+.env
+.env.*
+*.local
+.DS_Store
+.source/
+.dev.vars
