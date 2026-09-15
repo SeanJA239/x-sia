@@ -1,0 +1,291 @@
+{
+  "title": "工程基础丛书",
+  "subtitle": "从 Linux 到计算系统，从电路接口到数学模型",
+  "edition": "0.5 · 分篇教材与 AI Infra 选编",
+  "volumes": [
+    {
+      "id": "linux",
+      "number": "I",
+      "title": "Linux 与计算机系统",
+      "accent": "#21645d",
+      "description": "七篇贯通系统接口、OS 与内核、线程调度、内存 I/O、两类流水线及编译装载；从使用走到设计与实现。",
+      "prerequisites": "基础篇从终端开始；机制篇逐步引入 C、Python、二进制与简单代数，章首给出先修。",
+      "parts": [
+        {
+          "id": "interfaces",
+          "title": "第一篇 · 系统接口与基础工具",
+          "description": "先掌握执行、文件与数据流的边界。",
+          "chapters": ["process", "files", "shell"]
+        },
+        {
+          "id": "os-kernel",
+          "title": "第二篇 · 操作系统与内核",
+          "description": "从抽象和保护进入内核执行、等待与中断。",
+          "chapters": ["os", "kernel"]
+        },
+        {
+          "id": "concurrency",
+          "title": "第三篇 · 线程、并发与调度",
+          "description": "从正确性协议到处理器分配与响应时间。",
+          "chapters": ["threads", "scheduling"]
+        },
+        {
+          "id": "memory-io",
+          "title": "第四篇 · 内存、存储与 I/O",
+          "description": "连接地址转换、缓存、设备队列和异步完成。",
+          "chapters": ["virtual-memory", "io"]
+        },
+        {
+          "id": "pipelines",
+          "title": "第五篇 · 流水线结构与设计",
+          "description": "分别推演 CPU 指令流水线与软件有界数据流。",
+          "chapters": ["cpu-pipeline", "dataflow"]
+        },
+        {
+          "id": "compilation",
+          "title": "第六篇 · 编译与程序构建",
+          "description": "从词法、AST 和 IR 到符号、链接、ABI 与装载。",
+          "chapters": ["compiler", "toolchain"]
+        },
+        {
+          "id": "engineering",
+          "title": "第七篇 · 系统观测与工程验收",
+          "description": "用证据定位瓶颈，用完整契约组织可靠自动化。",
+          "chapters": ["observe"]
+        }
+      ],
+      "chapters": [
+        {
+          "id": "process",
+          "title": "系统、进程与执行边界",
+          "summary": "从敲下命令开始，理解系统调用、进程身份、状态与退出。"
+        },
+        {
+          "id": "files",
+          "title": "文件、目录与权限模型",
+          "summary": "沿路径找到 inode，区分名字、对象、打开状态与访问权。"
+        },
+        {
+          "id": "shell",
+          "title": "Shell、引用与数据流",
+          "summary": "从参数展开到文件描述符，写出保留数据和错误的管道。"
+        },
+        {
+          "id": "os",
+          "title": "操作系统：抽象、保护与资源管理",
+          "summary": "区分机制与策略，连接特权、地址空间、并发与资源共享。"
+        },
+        {
+          "id": "kernel",
+          "title": "Linux 内核：执行上下文与系统调用路径",
+          "summary": "追踪系统调用、等待和唤醒，理解锁、睡眠与中断约束。"
+        },
+        {
+          "id": "threads",
+          "title": "线程、同步与并发正确性",
+          "summary": "从不变量推导互斥、条件变量、内存顺序、死锁与性能上限。"
+        },
+        {
+          "id": "scheduling",
+          "title": "调度、响应时间与资源分配",
+          "summary": "手算并模拟调度时间表，理解公平、优先级、迁移与配额。"
+        },
+        {
+          "id": "virtual-memory",
+          "title": "虚拟内存：页表、缺页与缓存",
+          "summary": "推导地址转换，区分 TLB、缺页、映射、写时复制与回收。"
+        },
+        {
+          "id": "io",
+          "title": "I/O 路径：缓存、设备与异步完成",
+          "summary": "连接缓冲、DMA、就绪、提交、完成和持久性，并计算在途请求。"
+        },
+        {
+          "id": "cpu-pipeline",
+          "title": "CPU 流水线：数据通路、冒险与性能",
+          "summary": "推导五级流水时序、转发与停顿，分析分支、CPI 和提交边界。"
+        },
+        {
+          "id": "dataflow",
+          "title": "软件流水线：有界队列、背压与失败传播",
+          "summary": "计算阶段容量，运行有界生产者消费者，设计保序、关闭与重试。"
+        },
+        {
+          "id": "compiler",
+          "title": "编译原理：词法、语法、语义与中间表示",
+          "summary": "实现一个表达式解析器，再连接类型、符号表、控制流与优化。"
+        },
+        {
+          "id": "toolchain",
+          "title": "从目标文件到运行：链接、ABI 与装载",
+          "summary": "运行双文件 C 构建，解释符号重定位、ELF、动态链接与启动。"
+        },
+        {
+          "id": "observe",
+          "title": "系统观察与可靠自动化",
+          "summary": "区分负载、CPU、内存与 I/O，用明确边界组织脚本。"
+        }
+      ]
+    },
+    {
+      "id": "servers",
+      "number": "II",
+      "title": "服务器基础",
+      "accent": "#345d91",
+      "description": "把能运行的程序变成可访问、可维护、可恢复的服务。",
+      "prerequisites": "Linux 卷；了解进程、文件权限和标准输出。",
+      "chapters": [
+        {
+          "id": "network",
+          "title": "网络路径与 SSH 信任",
+          "summary": "逐层理解地址、子网、路由、端口、DNS 与身份验证。"
+        },
+        {
+          "id": "services",
+          "title": "服务生命周期与 HTTP",
+          "summary": "从 systemd 到反向代理，区分存活、就绪与真正完成请求。"
+        },
+        {
+          "id": "storage",
+          "title": "持久化、备份与恢复",
+          "summary": "解释缓存、同步、快照和恢复目标，不把副本数量当成安全。"
+        },
+        {
+          "id": "capacity",
+          "title": "容量、隔离与可观测性",
+          "summary": "用吞吐、延迟和排队理解容量，用资源边界控制故障。"
+        }
+      ]
+    },
+    {
+      "id": "embedded",
+      "number": "III",
+      "title": "嵌入式基础",
+      "accent": "#a15430",
+      "description": "连接电压、时钟、代码与外设，建立从构建到测量的完整链路。",
+      "prerequisites": "基础 C 语法；Linux 工具使用；电压、电流和电阻的概念。",
+      "chapters": [
+        {
+          "id": "circuits",
+          "title": "电气边界、GPIO 与采样",
+          "summary": "把逻辑电平还原成电路约束，计算限流、上拉和量化误差。"
+        },
+        {
+          "id": "boot",
+          "title": "交叉编译、链接与启动",
+          "summary": "沿着 ELF、Flash、向量表和启动代码，追踪 main 之前发生的事。"
+        },
+        {
+          "id": "interrupts",
+          "title": "定时器、中断与共享状态",
+          "summary": "从计数器推导周期，理解延迟、优先级和中断间的数据交换。"
+        },
+        {
+          "id": "interfaces",
+          "title": "通信协议与分层调试",
+          "summary": "比较 UART、SPI、I²C，并用证据定位接口故障。"
+        }
+      ]
+    },
+    {
+      "id": "systems",
+      "number": "IV",
+      "title": "计算机系统",
+      "accent": "#705087",
+      "description": "从位模式走向机器执行，理解程序、体系结构和操作系统之间的约定。",
+      "prerequisites": "基础 C、二进制与简单代数；可与 Linux、嵌入式卷交叉阅读。",
+      "chapters": [
+        {
+          "id": "representation",
+          "title": "数据表示与指令执行",
+          "summary": "推导补码和浮点格式，用一条加载指令认识状态机。"
+        },
+        {
+          "id": "toolchain",
+          "title": "编译、链接与 ABI",
+          "summary": "理解翻译单元、符号、重定位和函数调用的二进制契约。"
+        },
+        {
+          "id": "memory",
+          "title": "虚拟内存与缓存层次",
+          "summary": "计算页内偏移、缓存组索引和平均访问时间。"
+        },
+        {
+          "id": "concurrency",
+          "title": "并发、流水线与性能边界",
+          "summary": "区分交错和并行，理解原子性、冒险、CPI 与加速上限。"
+        }
+      ]
+    },
+    {
+      "id": "math",
+      "number": "V",
+      "title": "数学工具",
+      "accent": "#37677b",
+      "description": "从定义与推导出发，用向量、变化率、概率和频域表达工程问题。",
+      "prerequisites": "高中代数、函数与三角函数；部分代码用 Python 标准库。",
+      "chapters": [
+        {
+          "id": "linear",
+          "title": "向量、投影与最小二乘",
+          "summary": "从最短距离推导投影与正规方程，再讨论秩和病态问题。"
+        },
+        {
+          "id": "calculus",
+          "title": "微积分与数值稳定性",
+          "summary": "由局部近似推导微分、积分、迭代求根和离散系统稳定条件。"
+        },
+        {
+          "id": "probability",
+          "title": "概率、噪声与参数估计",
+          "summary": "连接条件概率、均值方差、误差传播和最小方差融合。"
+        },
+        {
+          "id": "signals",
+          "title": "信号、频域与反馈",
+          "summary": "从冲激分解推导卷积，由 RC 电路连接频响、采样和反馈。"
+        }
+      ]
+    },
+    {
+      "id": "languages",
+      "number": "VI",
+      "title": "编程语言",
+      "accent": "#735b27",
+      "description": "从零建立语言与运行模型，覆盖 C、C++、Python、Java、HTML/CSS/JavaScript 和 Rust。",
+      "prerequisites": "会保存文本文件和使用终端；从所选语言的第一章开始。",
+      "chapters": [
+        {
+          "id": "c",
+          "title": "C：从第一个程序到内存边界",
+          "summary": "从编译、控制流、函数到数组和指针，明确类型、长度与生命周期。"
+        },
+        {
+          "id": "cpp",
+          "title": "C++：值、容器与资源所有权",
+          "summary": "使用标准容器开始编程，理解 RAII、引用、复制、移动与失效规则。"
+        },
+        {
+          "id": "python",
+          "title": "Python：对象、函数与可维护脚本",
+          "summary": "理解名字绑定、可变对象、异常、文件与模块，用输入契约组织脚本。"
+        },
+        {
+          "id": "java",
+          "title": "Java：类型、对象与 JVM 执行",
+          "summary": "从 javac、方法与类到 GC 和资源生命周期，再进入工程组织。"
+        },
+        {
+          "id": "web",
+          "title": "Web：HTML、CSS 与 JavaScript 的协作",
+          "summary": "创建完整页面，理解文档语义、布局、事件、异步与安全边界。"
+        },
+        {
+          "id": "rust",
+          "title": "Rust：从 Cargo 到所有权与借用",
+          "summary": "结合官方教材原图解释 String、移动、复制和借用，入门 Result 与项目结构。"
+        }
+      ]
+    }
+  ]
+}

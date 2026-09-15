@@ -1,0 +1,28 @@
+{
+  "name": "books",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/serve.mjs --watch",
+    "start": "node scripts/serve.mjs",
+    "test": "node --test scripts/books.test.mjs",
+    "test:browser": "node scripts/browser-test.mjs",
+    "test:linux-examples": "node --test scripts/linux-examples.test.mjs",
+    "test:systems-examples": "node --test scripts/systems-examples.test.mjs",
+    "export:pdf": "node scripts/export-pdf.mjs"
+  },
+  "dependencies": {
+    "unified": "^11.0.5",
+    "remark-parse": "^11.0.0",
+    "remark-gfm": "^4.0.1",
+    "remark-math": "^6.0.0",
+    "remark-rehype": "^11.1.2",
+    "rehype-katex": "^7.0.1",
+    "rehype-stringify": "^10.0.1",
+    "katex": "^0.16.22"
+  },
+  "devDependencies": {
+    "playwright": "^1.63.0"
+  }
+}

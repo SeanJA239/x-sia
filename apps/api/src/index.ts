@@ -11,6 +11,7 @@ import { postRoutes } from './routes/posts'
 import { publicRoutes } from './routes/public'
 import { resourceRoutes } from './routes/resources'
 import { titleRoutes } from './routes/titles'
+import { wikiRoutes } from './routes/wiki'
 import type { AppEnv } from './types'
 
 const localOriginPattern = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/
@@ -50,6 +51,7 @@ api.route('/', publicRoutes)
 api.route('/', eventRoutes)
 api.route('/', postRoutes)
 api.route('/', titleRoutes)
+api.route('/', wikiRoutes)
 
 app.route('/api/v1', api)
 

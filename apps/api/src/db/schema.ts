@@ -324,7 +324,53 @@ export const passDevice = sqliteTable(
   ],
 )
 
+// Wiki 的稳定页面与不可变修订分离。指针在同一 D1 batch 内由业务维护，避免循环外键。
+export const wikiPage = sqliteTable(
+  'wiki_page',
+  {
+    id: text('id').primaryKey(),
+    orgId: text('org_id')
+      .notNull()
+      .references(() => org.id),
+    slug: text('slug').notNull(),
+    draftRevisionId: text('draft_revision_id').notNull(),
+    publishedRevisionId: text('published_revision_id'),
+    version: integer('version').notNull().default(1),
+    lastMutationId: text('last_mutation_id').notNull(),
+    createdAt: text('created_at').notNull(),
+    updatedAt: text('updated_at').notNull(),
+    publishedAt: text('published_at'),
+  },
+  (t) => [unique('wiki_page_org_slug_unique').on(t.orgId, t.slug)],
+)
+
+export const wikiRevision = sqliteTable(
+  'wiki_revision',
+  {
+    id: text('id').primaryKey(),
+    orgId: text('org_id')
+      .notNull()
+      .references(() => org.id),
+    pageId: text('page_id')
+      .notNull()
+      .references(() => wikiPage.id),
+    number: integer('number').notNull(),
+    title: text('title').notNull(),
+    summary: text('summary').notNull().default(''),
+    category: text('category').notNull().default('未分类'),
+    bodyMd: text('body_md').notNull(),
+    changeNote: text('change_note').notNull(),
+    authorId: text('author_id')
+      .notNull()
+      .references(() => user.id),
+    createdAt: text('created_at').notNull(),
+  },
+  (t) => [unique('wiki_revision_page_number_unique').on(t.pageId, t.number)],
+)
+
 export const schema = {
+  wikiPage,
+  wikiRevision,
   org,
   user,
   session,

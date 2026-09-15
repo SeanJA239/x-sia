@@ -3,11 +3,12 @@ import { Link } from 'expo-router'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
+import { WikiNavLink } from '@/components/WikiNavLink'
 import { colors, fontFamily, radius, spacing } from '@/constants/theme'
 import { useAuth } from '@/lib/auth'
 
 type NavItem = {
-  href: '/' | '/activities' | '/card' | '/resources' | '/profile'
+  href: '/' | '/activities' | '/card' | '/wiki/' | '/resources' | '/profile'
   label: string
   icon: keyof typeof Feather.glyphMap
   raised?: boolean
@@ -17,6 +18,7 @@ const NAV_ITEMS: NavItem[] = [
   { href: '/', label: '首页', icon: 'home' },
   { href: '/activities', label: '活动', icon: 'calendar' },
   { href: '/card', label: '卡片', icon: 'credit-card', raised: true },
+  { href: '/wiki/', label: 'Wiki', icon: 'book-open' },
   { href: '/resources', label: '资源', icon: 'folder' },
   { href: '/profile', label: '我的', icon: 'user' },
 ]
@@ -37,10 +39,11 @@ export function AppNavBar({
         <Text style={styles.brand}>X-SIA</Text>
         <View style={styles.topLinks}>
           {NAV_ITEMS.map((item) => {
+            if (item.href === '/wiki/') return <WikiNavLink key={item.href} variant="top" />
             const active = activePath === item.href
             return (
               <Link key={item.href} href={item.href} asChild>
-                <Pressable style={styles.topLinkItem}>
+                <Pressable accessibilityLabel={item.label} style={styles.topLinkItem}>
                   <Feather
                     name={item.icon}
                     size={15}
@@ -72,11 +75,12 @@ export function AppNavBar({
   return (
     <View style={[styles.bottomBar, { paddingBottom: Math.max(insets.bottom, spacing.sm) }]}>
       {NAV_ITEMS.map((item) => {
+        if (item.href === '/wiki/') return <WikiNavLink key={item.href} variant="bottom" />
         const active = activePath === item.href
         if (item.raised) {
           return (
             <Link key={item.href} href={item.href} asChild>
-              <Pressable style={styles.raisedWrap}>
+              <Pressable accessibilityLabel={item.label} style={styles.raisedWrap}>
                 <View style={styles.raisedButton}>
                   <Feather name={item.icon} size={20} color={colors.buttonText} />
                 </View>
@@ -87,7 +91,7 @@ export function AppNavBar({
         }
         return (
           <Link key={item.href} href={item.href} asChild>
-            <Pressable style={styles.bottomItem}>
+            <Pressable accessibilityLabel={item.label} style={styles.bottomItem}>
               <Feather name={item.icon} size={20} color={active ? colors.text : colors.textMuted} />
               <Text style={[styles.bottomLabel, active && styles.bottomLabelActive]}>
                 {item.label}

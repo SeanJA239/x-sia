@@ -1,0 +1,10 @@
+# Preserve licensed originals byte-for-byte for their recorded SHA256 identities.
+apps/books/assets/third-party/** -text
+apps/books/assets/figures/aib-*.svg -text
+apps/books/assets/figures/rust-string-*.svg -text
+# Upstream SVG path data intentionally carries trailing spaces; do not rewrite it.
+apps/books/assets/third-party/**/*.svg whitespace=-blank-at-eol
+apps/books/assets/figures/aib-*.svg whitespace=-blank-at-eol
+apps/books/assets/figures/rust-string-*.svg whitespace=-blank-at-eol
+# Embedded license text and marked examples must also survive Windows checkouts.
+apps/books/content/**/*.md text eol=lf

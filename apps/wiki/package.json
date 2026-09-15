@@ -1,0 +1,39 @@
+{
+  "name": "wiki",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "react-router dev --host 127.0.0.1 --port 8082 --strictPort",
+    "build": "react-router build",
+    "start": "react-router-serve ./build/server/index.js",
+    "typecheck": "react-router typegen && tsc --noEmit",
+    "test:smoke": "node scripts/smoke.mjs",
+    "test:navigation": "node scripts/navigation-smoke.mjs",
+    "test:curriculum": "node scripts/curriculum-smoke.mjs",
+    "test:curriculum:production": "node scripts/curriculum-production-smoke.mjs"
+  },
+  "dependencies": {
+    "@react-router/node": "^8.3.0",
+    "@react-router/serve": "^8.3.0",
+    "isbot": "^5",
+    "katex": "^0.16.22",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-markdown": "^10.1.0",
+    "react-router": "^8.3.0",
+    "rehype-katex": "^7.0.1",
+    "remark-gfm": "^4.0.1",
+    "remark-math": "^6.0.0",
+    "remark-parse": "^11.0.0",
+    "unified": "^11.0.5"
+  },
+  "devDependencies": {
+    "@react-router/dev": "^8.3.0",
+    "@types/node": "^26.2.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "playwright": "^1.63.0",
+    "typescript": "^6.0.3",
+    "vite": "^8.2.1"
+  }
+}
