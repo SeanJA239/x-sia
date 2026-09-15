@@ -1,0 +1,655 @@
+{
+  "status": "编写计划，不计入已完成正文",
+  "target": "每个独立主题按 30–50 章、约 8–15 万汉字规划；实际完成量单独统计。字数只是编辑预算，不代替技术质量。",
+  "tracks": [
+    {
+      "id": "linux",
+      "title": "Linux 与计算机系统",
+      "volume": "linux",
+      "editorialStatus": "七篇十四章 · 四章含 AI Infra 选编",
+      "stages": [
+        {
+          "title": "零基础入门",
+          "topics": [
+            "发行版与安全练习环境",
+            "终端、路径与帮助系统",
+            "用户、权限与软件包",
+            "文本编辑与文件操作"
+          ]
+        },
+        {
+          "title": "OS、内核与并发机制",
+          "topics": [
+            "进程与系统调用",
+            "Shell 展开与数据流",
+            "文件系统与挂载",
+            "启动链与服务",
+            "内存、缓存和 I/O",
+            "线程同步与调度",
+            "CPU 指令流水线与软件有界流水线",
+            "编译前端、IR、链接与装载"
+          ]
+        },
+        {
+          "title": "工程实践",
+          "topics": [
+            "健壮脚本与测试",
+            "Git 与构建环境",
+            "系统日志与性能观察",
+            "网络排错",
+            "容器边界与资源约束"
+          ]
+        },
+        {
+          "title": "综合项目",
+          "topics": ["可靠的批处理工具", "可重复搭建的开发环境", "故障记录与恢复手册"]
+        }
+      ],
+      "references": [
+        {
+          "title": "鸟哥的 Linux 私房菜",
+          "url": "https://linux.vbird.org/",
+          "language": "中文",
+          "purpose": "从基础环境、文件、权限与 Shell 建立连续学习路线，注意发行版和版本差异。"
+        },
+        {
+          "title": "ArchWiki",
+          "url": "https://wiki.archlinux.org/",
+          "language": "英文 / 多语言",
+          "purpose": "按具体软件与系统问题查配置、限制和排错，不照搬发行版专有命令。"
+        },
+        {
+          "title": "The Linux Command Line",
+          "url": "https://linuxcommand.org/tlcl.php",
+          "language": "英文",
+          "purpose": "系统学习命令组合与脚本，配合自己的安全练习目录。"
+        },
+        {
+          "title": "Linux man-pages",
+          "url": "https://man7.org/linux/man-pages/",
+          "language": "英文",
+          "purpose": "核对系统调用、错误码与内核接口语义。"
+        }
+      ]
+    },
+    {
+      "id": "servers",
+      "title": "服务器",
+      "volume": "servers",
+      "stages": [
+        {
+          "title": "零基础入门",
+          "topics": ["主机、地址、端口与 DNS", "SSH 身份和密钥", "服务与日志", "磁盘、目录和权限"]
+        },
+        {
+          "title": "核心机制",
+          "topics": [
+            "TCP 与连接状态",
+            "HTTP、TLS 与代理",
+            "持久化和事务",
+            "进程管理与容器",
+            "容量与排队"
+          ]
+        },
+        {
+          "title": "工程实践",
+          "topics": [
+            "数据库与缓存部署",
+            "备份及恢复演练",
+            "证书更新和秘密管理",
+            "监控、告警与追踪",
+            "发布和回滚"
+          ]
+        },
+        {
+          "title": "综合项目",
+          "topics": ["部署带数据库的小服务", "故障注入与恢复计划", "负载和容量评估"]
+        }
+      ],
+      "references": [
+        {
+          "title": "Ubuntu Server Documentation",
+          "url": "https://documentation.ubuntu.com/server/",
+          "language": "英文",
+          "purpose": "从安装到服务运维的官方路线，适用命令以版本为准。"
+        },
+        {
+          "title": "Google SRE Book",
+          "url": "https://sre.google/sre-book/table-of-contents/",
+          "language": "英文",
+          "purpose": "理解服务目标、监控、容量和事故处理，不把大规模实践机械套到小项目。"
+        },
+        {
+          "title": "OpenSSH Manual",
+          "url": "https://www.openssh.com/manual.html",
+          "language": "英文",
+          "purpose": "核对认证、转发和安全配置。"
+        },
+        {
+          "title": "小林 coding",
+          "url": "https://xiaolincoding.com/",
+          "language": "中文",
+          "purpose": "辅助理解网络和操作系统；涉及协议细节时再查标准与官方文档。"
+        }
+      ]
+    },
+    {
+      "id": "embedded",
+      "title": "嵌入式",
+      "volume": "embedded",
+      "stages": [
+        {
+          "title": "零基础入门",
+          "topics": ["电气安全与数据手册", "C 和工具链", "GPIO 与简单电路", "烧录、串口与断点"]
+        },
+        {
+          "title": "核心机制",
+          "topics": [
+            "向量表与启动",
+            "时钟树与定时器",
+            "中断与共享状态",
+            "UART、SPI、I²C",
+            "ADC 与 DMA"
+          ]
+        },
+        {
+          "title": "工程实践",
+          "topics": [
+            "驱动分层与状态机",
+            "RTOS 任务和同步",
+            "协议设计与缓冲",
+            "低功耗与看门狗",
+            "板级测试和日志"
+          ]
+        },
+        {
+          "title": "综合项目",
+          "topics": ["传感器采集终端", "上位机与固件协议", "可维护的板级参考工程"]
+        }
+      ],
+      "references": [
+        {
+          "title": "ST STM32 文档",
+          "url": "https://www.st.com/en/microcontrollers-microprocessors/stm32-32-bit-arm-cortex-mcus.html",
+          "language": "英文 / 中文资料",
+          "purpose": "首先确认确切料号的 datasheet、reference manual 和 errata。"
+        },
+        {
+          "title": "Arm CMSIS",
+          "url": "https://arm-software.github.io/CMSIS_6/latest/General/index.html",
+          "language": "英文",
+          "purpose": "理解 Cortex-M 核接口、启动和中断约定。"
+        },
+        {
+          "title": "野火嵌入式文档",
+          "url": "https://doc.embedfire.com/",
+          "language": "中文",
+          "purpose": "结合具体开发板的完整实践路线，避免把板级接线当通用器件规则。"
+        },
+        {
+          "title": "FreeRTOS Documentation",
+          "url": "https://www.freertos.org/Documentation/00-Overview",
+          "language": "英文",
+          "purpose": "系统学习任务、调度、同步与移植条件。"
+        }
+      ]
+    },
+    {
+      "id": "systems",
+      "title": "计算机系统",
+      "volume": "systems",
+      "stages": [
+        {
+          "title": "零基础入门",
+          "topics": ["位、整数和浮点", "逻辑与状态机", "汇编和指令", "编译链接与调试"]
+        },
+        {
+          "title": "核心机制",
+          "topics": [
+            "数据通路与流水线",
+            "缓存与虚拟内存",
+            "异常与特权",
+            "系统调用和文件",
+            "并发与内存模型"
+          ]
+        },
+        {
+          "title": "工程实践",
+          "topics": [
+            "解释执行与模拟器",
+            "差分测试",
+            "性能分析与局部性",
+            "ABI 和跨语言边界",
+            "网络与持久化程序"
+          ]
+        },
+        {
+          "title": "综合项目",
+          "topics": ["小型 ISA 模拟器", "简化内存分配器", "可测试的并发服务器"]
+        }
+      ],
+      "references": [
+        {
+          "title": "CS:APP",
+          "url": "https://csapp.cs.cmu.edu/",
+          "language": "英文 / 有中文译本",
+          "purpose": "作为系统主题结构的参照教材；不复制其受版权保护的教材内容。"
+        },
+        {
+          "title": "OSTEP",
+          "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/",
+          "language": "英文",
+          "purpose": "围绕虚拟化、并发和持久化逐章学习。"
+        },
+        {
+          "title": "南京大学 ICS PA",
+          "url": "https://nju-projectn.github.io/ics-pa-gitbook/",
+          "language": "中文",
+          "purpose": "通过连续实践理解模拟器、运行时和系统边界。"
+        },
+        {
+          "title": "RISC-V ISA",
+          "url": "https://docs.riscv.org/reference/isa/",
+          "language": "英文",
+          "purpose": "核对指令与执行环境契约，不把微架构实现当 ISA 要求。"
+        }
+      ]
+    },
+    {
+      "id": "math",
+      "title": "数学工具",
+      "volume": "math",
+      "stages": [
+        {
+          "title": "零基础补齐",
+          "topics": [
+            "函数、单位和复数",
+            "向量、矩阵与几何",
+            "极限、导数和积分",
+            "基本概率与条件概率"
+          ]
+        },
+        {
+          "title": "核心工具",
+          "topics": [
+            "线性方程、秩与投影",
+            "QR、SVD 与最小二乘",
+            "微分方程与数值误差",
+            "卷积与傅里叶",
+            "概率模型与估计"
+          ]
+        },
+        {
+          "title": "工程方法",
+          "topics": [
+            "Laplace 与 Z 变换",
+            "反馈、极点与稳定性",
+            "滤波和状态估计",
+            "优化与约束",
+            "误差传播与可辨识性"
+          ]
+        },
+        {
+          "title": "综合项目",
+          "topics": ["数据拟合与不确定度", "离散信号分析器", "有验证基准的控制模型"]
+        }
+      ],
+      "references": [
+        {
+          "title": "MIT OCW 18.06",
+          "url": "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/",
+          "language": "英文",
+          "purpose": "线性代数的系统课程与练习。"
+        },
+        {
+          "title": "3Blue1Brown",
+          "url": "https://www.3blue1brown.com/",
+          "language": "英文 / 部分中文字幕",
+          "purpose": "建立几何直觉，不能用动画理解替代推导和做题。"
+        },
+        {
+          "title": "DSP Guide",
+          "url": "https://www.dspguide.com/",
+          "language": "英文",
+          "purpose": "从信号、卷积到频域与数字滤波。"
+        },
+        {
+          "title": "Feedback Systems",
+          "url": "https://fbsbook.org/",
+          "language": "英文",
+          "purpose": "完整控制教材，逐步连接状态空间、反馈和设计。"
+        }
+      ]
+    },
+    {
+      "id": "c",
+      "title": "C",
+      "volume": "languages",
+      "chapter": "c",
+      "stages": [
+        {
+          "title": "零基础入门",
+          "topics": ["编译环境与第一个程序", "类型和表达式", "条件与循环", "函数与参数"]
+        },
+        {
+          "title": "语言机制",
+          "topics": [
+            "数组与字符串",
+            "指针和对象寿命",
+            "结构体与布局",
+            "预处理与多文件程序",
+            "标准库 I/O"
+          ]
+        },
+        {
+          "title": "工程实践",
+          "topics": [
+            "动态内存与所有权约定",
+            "错误处理与边界检查",
+            "构建与调试",
+            "测试和 sanitizer",
+            "可移植性与 ABI"
+          ]
+        },
+        {
+          "title": "综合项目",
+          "topics": ["动态数组与字符串工具", "安全解析文本文件", "带测试的命令行程序"]
+        }
+      ],
+      "references": [
+        {
+          "title": "阮一峰 C 教程",
+          "url": "https://wangdoc.com/clang/",
+          "language": "中文",
+          "purpose": "入门概念与连贯章节。"
+        },
+        {
+          "title": "GNU C Manual",
+          "url": "https://www.gnu.org/software/c-intro-and-ref/manual/",
+          "language": "英文",
+          "purpose": "从入门到参考，注意 GNU 扩展。"
+        },
+        {
+          "title": "cppreference C",
+          "url": "https://en.cppreference.com/w/c/language.html",
+          "language": "英文",
+          "purpose": "核对标准语义和接口限制。"
+        }
+      ]
+    },
+    {
+      "id": "cpp",
+      "title": "C++",
+      "volume": "languages",
+      "chapter": "cpp",
+      "stages": [
+        {
+          "title": "零基础入门",
+          "topics": ["工具链与表达式", "控制流与函数", "string 与 vector", "值与引用"]
+        },
+        {
+          "title": "语言机制",
+          "topics": ["类和不变量", "RAII 与析构", "复制和移动", "模板与概念", "迭代器与算法"]
+        },
+        {
+          "title": "工程实践",
+          "topics": ["异常安全", "智能指针和资源设计", "模块和库边界", "并发和性能", "测试与构建"]
+        },
+        {
+          "title": "综合项目",
+          "topics": ["资源安全的文件工具", "泛型数据处理库", "并发任务执行器"]
+        }
+      ],
+      "references": [
+        {
+          "title": "LearnCpp",
+          "url": "https://www.learncpp.com/",
+          "language": "英文",
+          "purpose": "从入门开始的连续教程。"
+        },
+        {
+          "title": "现代 C++ 教程",
+          "url": "https://changkun.de/modern-cpp/zh-cn/",
+          "language": "中文",
+          "purpose": "补充现代语言特性与工程用法。"
+        },
+        {
+          "title": "C++ Core Guidelines",
+          "url": "https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines",
+          "language": "英文",
+          "purpose": "围绕接口、资源和并发建立代码审查规则。"
+        }
+      ]
+    },
+    {
+      "id": "python",
+      "title": "Python",
+      "volume": "languages",
+      "chapter": "python",
+      "stages": [
+        {
+          "title": "零基础入门",
+          "topics": ["解释器与环境", "表达式和控制流", "容器与切片", "函数与返回值"]
+        },
+        {
+          "title": "语言机制",
+          "topics": [
+            "对象、可变性和作用域",
+            "迭代器与生成器",
+            "异常与上下文管理",
+            "类与数据模型",
+            "模块和导入"
+          ]
+        },
+        {
+          "title": "工程实践",
+          "topics": [
+            "包和依赖管理",
+            "类型注解与测试",
+            "文件格式与日志",
+            "并发和异步 I/O",
+            "性能与数值工具"
+          ]
+        },
+        {
+          "title": "综合项目",
+          "topics": ["可测试的 CLI", "结构化数据处理流水线", "带错误预算的网络客户端"]
+        }
+      ],
+      "references": [
+        {
+          "title": "官方中文教程",
+          "url": "https://docs.python.org/zh-cn/3/tutorial/",
+          "language": "中文",
+          "purpose": "按官方语义循序学习。"
+        },
+        {
+          "title": "廖雪峰 Python",
+          "url": "https://www.liaoxuefeng.com/wiki/1016959663602400",
+          "language": "中文",
+          "purpose": "结合练习理解基础与应用。"
+        },
+        {
+          "title": "Real Python",
+          "url": "https://realpython.com/",
+          "language": "英文",
+          "purpose": "按工程问题选读，不默认所有内容免费或可转载。"
+        }
+      ]
+    },
+    {
+      "id": "java",
+      "title": "Java",
+      "volume": "languages",
+      "chapter": "java",
+      "stages": [
+        {
+          "title": "零基础入门",
+          "topics": ["JDK 和编译执行", "类型与控制流", "方法与数组", "类和封装"]
+        },
+        {
+          "title": "语言机制",
+          "topics": ["接口和继承", "泛型与集合", "异常和资源", "对象相等与哈希", "JVM 基本执行模型"]
+        },
+        {
+          "title": "工程实践",
+          "topics": [
+            "构建工具与依赖",
+            "测试和日志",
+            "线程、虚拟线程与同步",
+            "GC 和性能观察",
+            "网络与数据库接口"
+          ]
+        },
+        {
+          "title": "综合项目",
+          "topics": ["数据处理命令行程序", "带测试的 HTTP 服务", "故障可诊断的持久化应用"]
+        }
+      ],
+      "references": [
+        {
+          "title": "dev.java",
+          "url": "https://dev.java/learn/",
+          "language": "英文",
+          "purpose": "官方语言、工具和集合学习路线。"
+        },
+        {
+          "title": "廖雪峰 Java",
+          "url": "https://www.liaoxuefeng.com/wiki/1252599548343744",
+          "language": "中文",
+          "purpose": "中文完整学习路径与练习。"
+        },
+        {
+          "title": "Java 规范",
+          "url": "https://docs.oracle.com/javase/specs/",
+          "language": "英文",
+          "purpose": "区分语言规范、JVM 规范与具体实现。"
+        }
+      ]
+    },
+    {
+      "id": "web",
+      "title": "HTML / CSS / JavaScript",
+      "volume": "languages",
+      "chapter": "web",
+      "stages": [
+        {
+          "title": "HTML 与页面基础",
+          "topics": ["文档与语义", "链接、图片与路径", "表单与验证", "可访问性与键盘交互"]
+        },
+        {
+          "title": "CSS 系统学习",
+          "topics": [
+            "层叠与选择器",
+            "盒模型与正常流",
+            "Flexbox 与 Grid",
+            "响应式布局",
+            "排版、颜色与动效边界"
+          ]
+        },
+        {
+          "title": "JavaScript 与浏览器",
+          "topics": [
+            "类型、函数和作用域",
+            "对象、原型与模块",
+            "DOM 与事件",
+            "Promise 与异步请求",
+            "状态、存储和安全"
+          ]
+        },
+        {
+          "title": "工程与综合项目",
+          "topics": [
+            "测试与构建",
+            "性能和可访问性检查",
+            "无框架交互应用",
+            "框架与服务端接口",
+            "可维护的完整网站"
+          ]
+        }
+      ],
+      "references": [
+        {
+          "title": "MDN 中文学习区",
+          "url": "https://developer.mozilla.org/zh-CN/docs/Learn_web_development",
+          "language": "中文",
+          "purpose": "HTML、CSS、JS 按基础到工程分步学习。"
+        },
+        {
+          "title": "现代 JavaScript 教程",
+          "url": "https://zh.javascript.info/",
+          "language": "中文",
+          "purpose": "深入语言与浏览器机制。"
+        },
+        {
+          "title": "web.dev Learn",
+          "url": "https://web.dev/learn",
+          "language": "英文 / 多语言",
+          "purpose": "布局、性能、可访问性和现代 Web 实践。"
+        }
+      ]
+    },
+    {
+      "id": "rust",
+      "title": "Rust",
+      "volume": "languages",
+      "chapter": "rust",
+      "stages": [
+        {
+          "title": "零基础入门",
+          "topics": ["Cargo 与项目", "绑定、表达式和函数", "基本类型与控制流", "结构体和枚举"]
+        },
+        {
+          "title": "核心机制",
+          "topics": [
+            "所有权和移动",
+            "借用与生命周期",
+            "Option 与 Result",
+            "trait 与泛型",
+            "迭代器和闭包"
+          ]
+        },
+        {
+          "title": "工程实践",
+          "topics": [
+            "模块、crate 与测试",
+            "智能指针与内部可变性",
+            "线程和消息传递",
+            "异步运行时",
+            "unsafe 与 FFI 边界"
+          ]
+        },
+        {
+          "title": "综合项目",
+          "topics": ["有错误模型的 CLI", "解析器与文件工具", "异步服务与资源预算"]
+        }
+      ],
+      "references": [
+        {
+          "title": "The Rust Programming Language",
+          "url": "https://doc.rust-lang.org/book/",
+          "language": "英文",
+          "purpose": "官方系统主线与本轮授权原图来源。"
+        },
+        {
+          "title": "Rust 程序设计语言中文版",
+          "url": "https://kaisery.github.io/trpl-zh-cn/",
+          "language": "中文",
+          "purpose": "辅助阅读官方教材，版本差异需核对。"
+        },
+        {
+          "title": "Rust 语言圣经",
+          "url": "https://github.com/sunface/rust-course",
+          "language": "中文",
+          "purpose": "连续路线、练习与实践案例。"
+        },
+        {
+          "title": "Rust by Example",
+          "url": "https://doc.rust-lang.org/rust-by-example/",
+          "language": "英文",
+          "purpose": "用小例子验证具体语法与机制。"
+        }
+      ]
+    }
+  ]
+}

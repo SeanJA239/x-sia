@@ -1,0 +1,99 @@
+{
+  "title": "深入理解 AI Infra：量化分析与系统设计",
+  "author": "李博杰 / Bojie Li",
+  "repository": "https://github.com/bojieli/ai-infra-book",
+  "revision": "58636943ba89f24b854f04f0f8f2fffe7b323829",
+  "license": "Apache-2.0",
+  "rows": [
+    {
+      "chapter": 1,
+      "title": "初识 AI Infra",
+      "placement": "数学工具：矩阵工作量与资源预算",
+      "status": "已选编 3 节",
+      "links": [{ "label": "资源预算专题", "to": "/learn/math/linear" }]
+    },
+    {
+      "chapter": 2,
+      "title": "模型架构",
+      "placement": "数学工具：张量、注意力与模型状态",
+      "status": "已归类，正文待整理",
+      "links": []
+    },
+    {
+      "chapter": 3,
+      "title": "推理与训练负载",
+      "placement": "服务器：容量、请求生命周期与服务预算",
+      "status": "已归类，正文待整理",
+      "links": []
+    },
+    {
+      "chapter": 4,
+      "title": "加速器架构",
+      "placement": "Linux 第四篇内存与 I/O、第五篇流水线",
+      "status": "已选编 4 节",
+      "links": [
+        { "label": "存储层次与并发", "to": "/learn/linux/virtual-memory" },
+        { "label": "异步搬移流水", "to": "/learn/linux/dataflow" }
+      ]
+    },
+    {
+      "chapter": 5,
+      "title": "算子与运行时",
+      "placement": "Linux 第四篇 I/O、第六篇编译",
+      "status": "已选编 7 节",
+      "links": [
+        { "label": "提交与完成事件", "to": "/learn/linux/io" },
+        { "label": "分块、融合与数值规则", "to": "/learn/linux/compiler" }
+      ]
+    },
+    {
+      "chapter": 6,
+      "title": "超节点",
+      "placement": "Linux 流水线设计；服务器多卡协作",
+      "status": "已选编 1 节，其余待整理",
+      "links": [{ "label": "流水线并行", "to": "/learn/linux/dataflow" }]
+    },
+    {
+      "chapter": 7,
+      "title": "数据中心网络",
+      "placement": "服务器：跨节点路径与吞吐约束",
+      "status": "已选编 1 节前半，其余待整理",
+      "links": [{ "label": "请求槽位模型", "to": "/learn/servers/network" }]
+    },
+    {
+      "chapter": 8,
+      "title": "推理优化",
+      "placement": "服务器：批处理、KV 与准入",
+      "status": "已归类，正文待整理",
+      "links": []
+    },
+    {
+      "chapter": 9,
+      "title": "分布式推理",
+      "placement": "服务器：状态放置、PD/AF 与恢复",
+      "status": "已归类，正文待整理",
+      "links": []
+    },
+    {
+      "chapter": 10,
+      "title": "训练系统",
+      "placement": "服务器：训练状态、通信与 checkpoint",
+      "status": "已归类，正文待整理",
+      "links": []
+    },
+    {
+      "chapter": 11,
+      "title": "资源调度与运行环境",
+      "placement": "Linux 第三/七篇及服务器：隔离与资源驻留",
+      "status": "已归类，正文待整理",
+      "links": []
+    },
+    {
+      "chapter": 12,
+      "title": "端边云协同",
+      "placement": "嵌入式进阶：设备、边缘与云的部署边界",
+      "status": "已归类，正文待整理",
+      "links": []
+    }
+  ]
+}

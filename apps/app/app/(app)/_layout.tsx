@@ -5,7 +5,8 @@ import { AppNavBar } from '@/components/AppNavBar'
 import { colors, DESKTOP_BREAKPOINT } from '@/constants/theme'
 
 /**
- * 登录后的应用外壳。不用 Tabs 导航器——五个入口都是普通同级路由，
+ * 登录后的应用外壳。不用 Tabs 导航器——成员功能与 Wiki 在导航中平级，
+ * Wiki 是同域独立应用，由普通网页链接跳转，不交给 Expo Router 处理。
  * 卡片路由本身在 (app) 分组之外（app/card.tsx），这里的导航按钮只是 Link。
  * 桌面宽度切换为顶部导航，窄屏为底部导航，用同一份 AppNavBar 组件。
  */

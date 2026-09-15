@@ -1,0 +1,44 @@
+{
+  "retrievedAt": "2026-09-14T12:28:55.285Z",
+  "images": [
+    {
+      "id": "rust-string-layout",
+      "file": "trpl04-01.svg",
+      "caption": "String 的指针、长度、容量与堆数据",
+      "sourceUrl": "https://raw.githubusercontent.com/rust-lang/book/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/img/trpl04-01.svg",
+      "originalPage": "https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html",
+      "upstreamRevision": "1500248d8f230566e4ec9f27fcbb8fe9e2898ab1",
+      "creator": "The Rust Project Developers / The Rust Programming Language contributors",
+      "license": "MIT (selected from the repository dual MIT/Apache-2.0 license)",
+      "licenseFile": "LICENSE-MIT.txt",
+      "modified": false,
+      "sha256": "6a1fa64ab777ad341b944bf7e81a2f2ba0591c02749018a840ef634c644f6ee3"
+    },
+    {
+      "id": "rust-string-move",
+      "file": "trpl04-02.svg",
+      "caption": "移动时栈上元数据与堆数据的关系",
+      "sourceUrl": "https://raw.githubusercontent.com/rust-lang/book/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/img/trpl04-02.svg",
+      "originalPage": "https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html",
+      "upstreamRevision": "1500248d8f230566e4ec9f27fcbb8fe9e2898ab1",
+      "creator": "The Rust Project Developers / The Rust Programming Language contributors",
+      "license": "MIT (selected from the repository dual MIT/Apache-2.0 license)",
+      "licenseFile": "LICENSE-MIT.txt",
+      "modified": false,
+      "sha256": "bb682764358406b00f0019cc94b701482846bd8e41ea7715a1e1514c6c8c1b70"
+    },
+    {
+      "id": "rust-string-clone",
+      "file": "trpl04-04.svg",
+      "caption": "深拷贝产生独立堆分配",
+      "sourceUrl": "https://raw.githubusercontent.com/rust-lang/book/1500248d8f230566e4ec9f27fcbb8fe9e2898ab1/src/img/trpl04-04.svg",
+      "originalPage": "https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html",
+      "upstreamRevision": "1500248d8f230566e4ec9f27fcbb8fe9e2898ab1",
+      "creator": "The Rust Project Developers / The Rust Programming Language contributors",
+      "license": "MIT (selected from the repository dual MIT/Apache-2.0 license)",
+      "licenseFile": "LICENSE-MIT.txt",
+      "modified": false,
+      "sha256": "040f910e94b35fb7df8eae5dbdb36a7e3ff916703fc7a1097a5e439b1a60b650"
+    }
+  ]
+}

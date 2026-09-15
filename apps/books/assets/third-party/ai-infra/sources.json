@@ -1,0 +1,365 @@
+{
+  "repository": "https://github.com/bojieli/ai-infra-book",
+  "revision": "58636943ba89f24b854f04f0f8f2fffe7b323829",
+  "author": "Bojie Li (李博杰)",
+  "copyright": "Copyright 2026 Bojie Li",
+  "license": "Apache-2.0",
+  "licenseSha256": "c1b6a99661affda21c759da02976e76cc6694c23ef564c0f1267cdf8d803ca19",
+  "modifications": "Selected and reorganized manuscript sections; original SVG bytes unchanged; no upstream scripts executed",
+  "records": [
+    {
+      "target": "math/linear",
+      "chapter": "01",
+      "section": "1.2.2",
+      "sourcePath": "manuscripts/01-初识 AI Infra.md",
+      "sourceSha256": "5495cca1fac72933adb62f64fe203f72b003fae4f38bab18d6a2a96dc276390f",
+      "startLine": 150,
+      "excerptOriginalSha256": "cc8801a6210deaa2c0980019af5eb224d9bdb3d815e7ff95eddae1307f447f05",
+      "shortenedBefore": null
+    },
+    {
+      "target": "math/linear",
+      "chapter": "01",
+      "section": "1.3.1",
+      "sourcePath": "manuscripts/01-初识 AI Infra.md",
+      "sourceSha256": "5495cca1fac72933adb62f64fe203f72b003fae4f38bab18d6a2a96dc276390f",
+      "startLine": 227,
+      "excerptOriginalSha256": "9b7a535ff3b4be467f9ef3b793f94e0c402c4bafd416b59fe237f0dfcad58088",
+      "shortenedBefore": null
+    },
+    {
+      "target": "math/linear",
+      "chapter": "01",
+      "section": "1.3.2",
+      "sourcePath": "manuscripts/01-初识 AI Infra.md",
+      "sourceSha256": "5495cca1fac72933adb62f64fe203f72b003fae4f38bab18d6a2a96dc276390f",
+      "startLine": 261,
+      "excerptOriginalSha256": "61bbbc2ab721ef7e55801a8825e95b08eb26e9de4b822954ed9c190d49dcc094",
+      "shortenedBefore": null
+    },
+    {
+      "target": "linux/virtual-memory",
+      "chapter": "04",
+      "section": "4.3.1",
+      "sourcePath": "manuscripts/04-加速器架构.md",
+      "sourceSha256": "d5df8934b96e71fe45910c7db17d4ed049e9b466eb4bf37365c4ff0325b464fb",
+      "startLine": 354,
+      "excerptOriginalSha256": "767409b0410030ef30cc40808d3b14ec93a76a127a5fbd58400cf2003be8511f",
+      "shortenedBefore": null
+    },
+    {
+      "target": "linux/virtual-memory",
+      "chapter": "04",
+      "section": "4.3.2",
+      "sourcePath": "manuscripts/04-加速器架构.md",
+      "sourceSha256": "d5df8934b96e71fe45910c7db17d4ed049e9b466eb4bf37365c4ff0325b464fb",
+      "startLine": 394,
+      "excerptOriginalSha256": "34772ac173c620a1c2624ff1849a28038e2dec35a560d1f92def2cf0f1c7575d",
+      "shortenedBefore": null
+    },
+    {
+      "target": "linux/virtual-memory",
+      "chapter": "04",
+      "section": "4.3.3",
+      "sourcePath": "manuscripts/04-加速器架构.md",
+      "sourceSha256": "d5df8934b96e71fe45910c7db17d4ed049e9b466eb4bf37365c4ff0325b464fb",
+      "startLine": 412,
+      "excerptOriginalSha256": "14891161764425abf1a225361aef018593a2e3d72f30108a9903f5242b20b8a4",
+      "shortenedBefore": null
+    },
+    {
+      "target": "linux/dataflow",
+      "chapter": "04",
+      "section": "4.4.2",
+      "sourcePath": "manuscripts/04-加速器架构.md",
+      "sourceSha256": "d5df8934b96e71fe45910c7db17d4ed049e9b466eb4bf37365c4ff0325b464fb",
+      "startLine": 490,
+      "excerptOriginalSha256": "f1c9d9586bf92adfdd934047fbd1bd19d74b97e28627677491d8b3ecfb82f7b7",
+      "shortenedBefore": null
+    },
+    {
+      "target": "linux/dataflow",
+      "chapter": "06",
+      "section": "6.2.5",
+      "sourcePath": "manuscripts/06-超节点.md",
+      "sourceSha256": "42bcb3880a2104517cdf8990ddf51550f3f60540d9442a6f99fabe95ae0dcc26",
+      "startLine": 281,
+      "excerptOriginalSha256": "8dd37ac9c2155be65802ef51204b3127c1123a750676e4220ccaee9de12a374c",
+      "shortenedBefore": null
+    },
+    {
+      "target": "linux/compiler",
+      "chapter": "05",
+      "section": "5.4.2",
+      "sourcePath": "manuscripts/05-算子与运行时.md",
+      "sourceSha256": "82bdcfc0764e24ac70d6259f7708f2085b3e57161a07b226324378dfa575dc6c",
+      "startLine": 489,
+      "excerptOriginalSha256": "e61dd64537f9ef128710f0237cfce0c1694cb9852f627cdd86cf34b91c0ba170",
+      "shortenedBefore": null
+    },
+    {
+      "target": "linux/compiler",
+      "chapter": "05",
+      "section": "5.4.3",
+      "sourcePath": "manuscripts/05-算子与运行时.md",
+      "sourceSha256": "82bdcfc0764e24ac70d6259f7708f2085b3e57161a07b226324378dfa575dc6c",
+      "startLine": 540,
+      "excerptOriginalSha256": "ad72400e21770bedcfa65df1ffb6b4e2afcb7e54f040c52b7072ae1c70e3e48a",
+      "shortenedBefore": null
+    },
+    {
+      "target": "linux/compiler",
+      "chapter": "05",
+      "section": "5.4.4",
+      "sourcePath": "manuscripts/05-算子与运行时.md",
+      "sourceSha256": "82bdcfc0764e24ac70d6259f7708f2085b3e57161a07b226324378dfa575dc6c",
+      "startLine": 566,
+      "excerptOriginalSha256": "c54c962ee91de5d1313160ee2d4a51cf81fccda4d55d47874ace90a3040df7d2",
+      "shortenedBefore": null
+    },
+    {
+      "target": "linux/io",
+      "chapter": "05",
+      "section": "5.1.1",
+      "sourcePath": "manuscripts/05-算子与运行时.md",
+      "sourceSha256": "82bdcfc0764e24ac70d6259f7708f2085b3e57161a07b226324378dfa575dc6c",
+      "startLine": 23,
+      "excerptOriginalSha256": "9377ea3556387b797236a26b7710d414cfe3f55052600f268910f4848d4ba9dc",
+      "shortenedBefore": null
+    },
+    {
+      "target": "linux/io",
+      "chapter": "05",
+      "section": "5.1.2",
+      "sourcePath": "manuscripts/05-算子与运行时.md",
+      "sourceSha256": "82bdcfc0764e24ac70d6259f7708f2085b3e57161a07b226324378dfa575dc6c",
+      "startLine": 35,
+      "excerptOriginalSha256": "f8757e24fd92b55f0ba63a387cb231aca154df621fe5a3b67d349948888effb3",
+      "shortenedBefore": null
+    },
+    {
+      "target": "linux/io",
+      "chapter": "05",
+      "section": "5.1.3",
+      "sourcePath": "manuscripts/05-算子与运行时.md",
+      "sourceSha256": "82bdcfc0764e24ac70d6259f7708f2085b3e57161a07b226324378dfa575dc6c",
+      "startLine": 67,
+      "excerptOriginalSha256": "f7023b0fd2d66806f62b9b96964f28d3b00504214f84c216d2cdc397777db8c5",
+      "shortenedBefore": null
+    },
+    {
+      "target": "linux/io",
+      "chapter": "05",
+      "section": "5.1.4",
+      "sourcePath": "manuscripts/05-算子与运行时.md",
+      "sourceSha256": "82bdcfc0764e24ac70d6259f7708f2085b3e57161a07b226324378dfa575dc6c",
+      "startLine": 94,
+      "excerptOriginalSha256": "8b5eb12fb01c45218d391806163e79594031f9efb91d1e350f3a058b58079cdf",
+      "shortenedBefore": null
+    },
+    {
+      "target": "servers/network",
+      "chapter": "07",
+      "section": "7.3.4",
+      "sourcePath": "manuscripts/07-数据中心网络.md",
+      "sourceSha256": "0a4a82a4d541300e78250f365e996df48601b8d699dff2411444d9407b37d9e5",
+      "startLine": 455,
+      "excerptOriginalSha256": "af014413588d22bba90604ce2a75c032330b996209ce70c7c933abc3c47a0638",
+      "shortenedBefore": "启动间隔 $\\delta$ 的一个具体来源"
+    }
+  ],
+  "images": [
+    {
+      "id": "aib-ch01-figure-1-read-path",
+      "file": "aib-ch01-figure-1-read-path.svg",
+      "path": "manuscripts/ch01/figure-1-read-path.svg",
+      "sha256": "4c45d895614ba2f5d8b6ca88a692c821e80613d0da38143d4ca7a580c7eb15ca",
+      "sourceUrl": "https://raw.githubusercontent.com/bojieli/ai-infra-book/58636943ba89f24b854f04f0f8f2fffe7b323829/manuscripts/ch01/figure-1-read-path.svg",
+      "modified": false
+    },
+    {
+      "id": "aib-ch01-figure-1-5-budget",
+      "file": "aib-ch01-figure-1-5-budget.svg",
+      "path": "manuscripts/ch01/figure-1-5-budget.svg",
+      "sha256": "dad420305e9b50771e2325d90219cbbec6263fcd48878db5a0544dc2731533e7",
+      "sourceUrl": "https://raw.githubusercontent.com/bojieli/ai-infra-book/58636943ba89f24b854f04f0f8f2fffe7b323829/manuscripts/ch01/figure-1-5-budget.svg",
+      "modified": false
+    },
+    {
+      "id": "aib-ch01-figure-1-batch-reuse",
+      "file": "aib-ch01-figure-1-batch-reuse.svg",
+      "path": "manuscripts/ch01/figure-1-batch-reuse.svg",
+      "sha256": "0a43b481ba752b3ca6b10003a14d880fb17bdf6b3c7d42b19634ccfd5427af38",
+      "sourceUrl": "https://raw.githubusercontent.com/bojieli/ai-infra-book/58636943ba89f24b854f04f0f8f2fffe7b323829/manuscripts/ch01/figure-1-batch-reuse.svg",
+      "modified": false
+    },
+    {
+      "id": "aib-ch01-figure-1-batch-transition",
+      "file": "aib-ch01-figure-1-batch-transition.svg",
+      "path": "manuscripts/ch01/figure-1-batch-transition.svg",
+      "sha256": "2d0ef2d4afe7f989d9f16f365b18d35081d4ffae5991b5de8efa29fda0a24a61",
+      "sourceUrl": "https://raw.githubusercontent.com/bojieli/ai-infra-book/58636943ba89f24b854f04f0f8f2fffe7b323829/manuscripts/ch01/figure-1-batch-transition.svg",
+      "modified": false
+    },
+    {
+      "id": "aib-ch01-figure-1-batch-throughput",
+      "file": "aib-ch01-figure-1-batch-throughput.svg",
+      "path": "manuscripts/ch01/figure-1-batch-throughput.svg",
+      "sha256": "8e840b84d1d1aaa3b165cff72d03bf8936179165cc3a1484c180bed0215690bf",
+      "sourceUrl": "https://raw.githubusercontent.com/bojieli/ai-infra-book/58636943ba89f24b854f04f0f8f2fffe7b323829/manuscripts/ch01/figure-1-batch-throughput.svg",
+      "modified": false
+    },
+    {
+      "id": "aib-ch04-figure-4-6-capacity",
+      "file": "aib-ch04-figure-4-6-capacity.svg",
+      "path": "manuscripts/ch04/figure-4-6-capacity.svg",
+      "sha256": "57444c5d24e997169098ffb5aed30a9ff2b34ef0e8660b89550cfe1cc6ca518d",
+      "sourceUrl": "https://raw.githubusercontent.com/bojieli/ai-infra-book/58636943ba89f24b854f04f0f8f2fffe7b323829/manuscripts/ch04/figure-4-6-capacity.svg",
+      "modified": false
+    },
+    {
+      "id": "aib-ch04-figure-4-memory-inflight",
+      "file": "aib-ch04-figure-4-memory-inflight.svg",
+      "path": "manuscripts/ch04/figure-4-memory-inflight.svg",
+      "sha256": "9237cf0bfa00e3ff1395b2ece4468b90de763ccc5ceee87b25425ef038ef12df",
+      "sourceUrl": "https://raw.githubusercontent.com/bojieli/ai-infra-book/58636943ba89f24b854f04f0f8f2fffe7b323829/manuscripts/ch04/figure-4-memory-inflight.svg",
+      "modified": false
+    },
+    {
+      "id": "aib-ch04-figure-4-7-memory",
+      "file": "aib-ch04-figure-4-7-memory.svg",
+      "path": "manuscripts/ch04/figure-4-7-memory.svg",
+      "sha256": "d9787cea71958247db5c45b1cc8bc41f58e4c3c1ba1469ea6b0627537666b5e8",
+      "sourceUrl": "https://raw.githubusercontent.com/bojieli/ai-infra-book/58636943ba89f24b854f04f0f8f2fffe7b323829/manuscripts/ch04/figure-4-7-memory.svg",
+      "modified": false
+    },
+    {
+      "id": "aib-ch04-figure-4-slot-lifetime",
+      "file": "aib-ch04-figure-4-slot-lifetime.svg",
+      "path": "manuscripts/ch04/figure-4-slot-lifetime.svg",
+      "sha256": "0f57dbddae83782fa36de77e7d3d5679b1ea15719b3ba29277de42e543a6aefd",
+      "sourceUrl": "https://raw.githubusercontent.com/bojieli/ai-infra-book/58636943ba89f24b854f04f0f8f2fffe7b323829/manuscripts/ch04/figure-4-slot-lifetime.svg",
+      "modified": false
+    },
+    {
+      "id": "aib-ch04-figure-4-9-pipeline",
+      "file": "aib-ch04-figure-4-9-pipeline.svg",
+      "path": "manuscripts/ch04/figure-4-9-pipeline.svg",
+      "sha256": "da039cc9842a5e8f1d43921521494b3a70b5cedc58e37a767639679bbc6f1834",
+      "sourceUrl": "https://raw.githubusercontent.com/bojieli/ai-infra-book/58636943ba89f24b854f04f0f8f2fffe7b323829/manuscripts/ch04/figure-4-9-pipeline.svg",
+      "modified": false
+    },
+    {
+      "id": "aib-ch04-figure-4-pipeline-two",
+      "file": "aib-ch04-figure-4-pipeline-two.svg",
+      "path": "manuscripts/ch04/figure-4-pipeline-two.svg",
+      "sha256": "88e9d7f7cfb6a312b660e1e20f064e260dc61a28ea463e0f981a055334bd90da",
+      "sourceUrl": "https://raw.githubusercontent.com/bojieli/ai-infra-book/58636943ba89f24b854f04f0f8f2fffe7b323829/manuscripts/ch04/figure-4-pipeline-two.svg",
+      "modified": false
+    },
+    {
+      "id": "aib-ch04-figure-4-pipeline-three",
+      "file": "aib-ch04-figure-4-pipeline-three.svg",
+      "path": "manuscripts/ch04/figure-4-pipeline-three.svg",
+      "sha256": "4eec6de14d2a878b6112f396c1600a88e4cd12617dcb00ae0cd1e92fe7ad2841",
+      "sourceUrl": "https://raw.githubusercontent.com/bojieli/ai-infra-book/58636943ba89f24b854f04f0f8f2fffe7b323829/manuscripts/ch04/figure-4-pipeline-three.svg",
+      "modified": false
+    },
+    {
+      "id": "aib-ch06-figure-6-pp",
+      "file": "aib-ch06-figure-6-pp.svg",
+      "path": "manuscripts/ch06/figure-6-pp.svg",
+      "sha256": "72cec3ee7312cb5306d6bee30934ff11d29dc5f1acb45911fc1a6319b2210dd7",
+      "sourceUrl": "https://raw.githubusercontent.com/bojieli/ai-infra-book/58636943ba89f24b854f04f0f8f2fffe7b323829/manuscripts/ch06/figure-6-pp.svg",
+      "modified": false
+    },
+    {
+      "id": "aib-ch06-figure-6-4-pipeline",
+      "file": "aib-ch06-figure-6-4-pipeline.svg",
+      "path": "manuscripts/ch06/figure-6-4-pipeline.svg",
+      "sha256": "23b5b4eaf4def87c4b81c6b53ed5ed8b390cafea2173bb7c562dbcff5b6c7e97",
+      "sourceUrl": "https://raw.githubusercontent.com/bojieli/ai-infra-book/58636943ba89f24b854f04f0f8f2fffe7b323829/manuscripts/ch06/figure-6-4-pipeline.svg",
+      "modified": false
+    },
+    {
+      "id": "aib-ch05-figure-5-9-polyhedral",
+      "file": "aib-ch05-figure-5-9-polyhedral.svg",
+      "path": "manuscripts/ch05/figure-5-9-polyhedral.svg",
+      "sha256": "c7b69ce5952aafffb5cee6bb12578a09eac29dc4f4ffbff14c32bbd37683dac5",
+      "sourceUrl": "https://raw.githubusercontent.com/bojieli/ai-infra-book/58636943ba89f24b854f04f0f8f2fffe7b323829/manuscripts/ch05/figure-5-9-polyhedral.svg",
+      "modified": false
+    },
+    {
+      "id": "aib-ch05-figure-5-activation-order",
+      "file": "aib-ch05-figure-5-activation-order.svg",
+      "path": "manuscripts/ch05/figure-5-activation-order.svg",
+      "sha256": "7b418f22210c434528dce4b174fc890ef387b285cce8a003450ed92b62e43930",
+      "sourceUrl": "https://raw.githubusercontent.com/bojieli/ai-infra-book/58636943ba89f24b854f04f0f8f2fffe7b323829/manuscripts/ch05/figure-5-activation-order.svg",
+      "modified": false
+    },
+    {
+      "id": "aib-ch05-figure-5-quantization-scale",
+      "file": "aib-ch05-figure-5-quantization-scale.svg",
+      "path": "manuscripts/ch05/figure-5-quantization-scale.svg",
+      "sha256": "482d5d510d02728c904a031c7d6549a8d32a831b3c3d50fa5cbe8e841d2c6e60",
+      "sourceUrl": "https://raw.githubusercontent.com/bojieli/ai-infra-book/58636943ba89f24b854f04f0f8f2fffe7b323829/manuscripts/ch05/figure-5-quantization-scale.svg",
+      "modified": false
+    },
+    {
+      "id": "aib-ch05-figure-5-10-quantization",
+      "file": "aib-ch05-figure-5-10-quantization.svg",
+      "path": "manuscripts/ch05/figure-5-10-quantization.svg",
+      "sha256": "3b642689562db09f908e9a39d4e4ebf03d798edd9d4a09e3559c4e9262c1c80b",
+      "sourceUrl": "https://raw.githubusercontent.com/bojieli/ai-infra-book/58636943ba89f24b854f04f0f8f2fffe7b323829/manuscripts/ch05/figure-5-10-quantization.svg",
+      "modified": false
+    },
+    {
+      "id": "aib-ch05-figure-5-copy-paths",
+      "file": "aib-ch05-figure-5-copy-paths.svg",
+      "path": "manuscripts/ch05/figure-5-copy-paths.svg",
+      "sha256": "299230039e2208a9f68ab3d0c990e71519060b9764299dce0c01626bf86089e0",
+      "sourceUrl": "https://raw.githubusercontent.com/bojieli/ai-infra-book/58636943ba89f24b854f04f0f8f2fffe7b323829/manuscripts/ch05/figure-5-copy-paths.svg",
+      "modified": false
+    },
+    {
+      "id": "aib-ch05-figure-5-stream-event",
+      "file": "aib-ch05-figure-5-stream-event.svg",
+      "path": "manuscripts/ch05/figure-5-stream-event.svg",
+      "sha256": "0e27191855a5e2d1e7c7ddbe9a2c6a056d65dc7325ff31913be048814cab088b",
+      "sourceUrl": "https://raw.githubusercontent.com/bojieli/ai-infra-book/58636943ba89f24b854f04f0f8f2fffe7b323829/manuscripts/ch05/figure-5-stream-event.svg",
+      "modified": false
+    },
+    {
+      "id": "aib-ch05-figure-5-1-execution",
+      "file": "aib-ch05-figure-5-1-execution.svg",
+      "path": "manuscripts/ch05/figure-5-1-execution.svg",
+      "sha256": "8c255f35bc7707524907d31b4f86d259219eb3a0766f64ffebd315e558db8e13",
+      "sourceUrl": "https://raw.githubusercontent.com/bojieli/ai-infra-book/58636943ba89f24b854f04f0f8f2fffe7b323829/manuscripts/ch05/figure-5-1-execution.svg",
+      "modified": false
+    },
+    {
+      "id": "aib-ch07-figure-7-slot-lifetime",
+      "file": "aib-ch07-figure-7-slot-lifetime.svg",
+      "path": "manuscripts/ch07/figure-7-slot-lifetime.svg",
+      "sha256": "4bb25ad0092389701893d03a516c174903c5a31bb406f30c8a9cd0e0cbbd2c01",
+      "sourceUrl": "https://raw.githubusercontent.com/bojieli/ai-infra-book/58636943ba89f24b854f04f0f8f2fffe7b323829/manuscripts/ch07/figure-7-slot-lifetime.svg",
+      "modified": false
+    },
+    {
+      "id": "aib-ch07-figure-7-9-window",
+      "file": "aib-ch07-figure-7-9-window.svg",
+      "path": "manuscripts/ch07/figure-7-9-window.svg",
+      "sha256": "9f2bb1a9260f850f1b0ef67501cef4e213f53c3e0f3aa86b25bcededdbe338fa",
+      "sourceUrl": "https://raw.githubusercontent.com/bojieli/ai-infra-book/58636943ba89f24b854f04f0f8f2fffe7b323829/manuscripts/ch07/figure-7-9-window.svg",
+      "modified": false
+    },
+    {
+      "id": "aib-ch07-figure-7-window-rate",
+      "file": "aib-ch07-figure-7-window-rate.svg",
+      "path": "manuscripts/ch07/figure-7-window-rate.svg",
+      "sha256": "e44f5d4364f0996c0bfd2f0e65983d08e6db8491b4181bdb59cd982a61bd8e0c",
+      "sourceUrl": "https://raw.githubusercontent.com/bojieli/ai-infra-book/58636943ba89f24b854f04f0f8f2fffe7b323829/manuscripts/ch07/figure-7-window-rate.svg",
+      "modified": false
+    }
+  ]
+}

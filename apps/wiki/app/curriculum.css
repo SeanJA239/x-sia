@@ -1,0 +1,366 @@
+.curriculum-index {
+  margin: 12px 0 38px;
+}
+.curriculum-volumes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px 30px;
+  margin-top: 25px;
+}
+.curriculum-volume {
+  border-top: 2px solid #a2a9b1;
+  padding-top: 16px;
+  min-width: 0;
+}
+.curriculum-volume:last-child {
+  grid-column: 1 / -1;
+}
+.curriculum-volume h3 {
+  font-size: 21px;
+  margin: 4px 0 12px;
+  font-weight: 500;
+}
+.curriculum-volume > p:not(.eyebrow) {
+  color: #54595d;
+  font-size: 13px;
+}
+.curriculum-volume ol {
+  padding-left: 22px;
+  font-size: 14px;
+}
+.curriculum-volume li {
+  padding: 5px 0;
+}
+.curriculum-index-part h4 {
+  font-size: 14px;
+  margin: 18px 0 6px;
+}
+.curriculum-index-part ol {
+  margin-top: 4px;
+}
+.volume-part {
+  margin: 32px 0;
+  scroll-margin-top: 20px;
+}
+.volume-part > h2 {
+  border-bottom: 1px solid #c8ccd1;
+  padding-bottom: 12px;
+}
+.volume-chapters h3 {
+  margin: 6px 0;
+}
+.volume-part-index {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid #c8ccd1;
+}
+.curriculum-layout a[data-depth="3"] {
+  padding-left: 14px;
+  font-size: 12px;
+}
+.curriculum-layout a[data-depth="4"] {
+  padding-left: 26px;
+  font-size: 12px;
+}
+.curriculum-print-part > h2 {
+  margin-top: 50px;
+  border-bottom: 2px solid #a2a9b1;
+  padding-bottom: 12px;
+}
+.textbook-markdown h4 {
+  font-size: 18px;
+  margin-top: 26px;
+}
+.learning-plan {
+  margin: 40px 0;
+  border-top: 1px solid #c8ccd1;
+  padding-top: 12px;
+}
+.learning-stages {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 24px;
+}
+.learning-stages section {
+  background: #f8f9fa;
+  padding: 12px 16px;
+}
+.learning-stages h4 {
+  margin: 0 0 8px;
+  font-size: 15px;
+}
+.learning-stages ul {
+  padding-left: 20px;
+  font-size: 13px;
+  color: #54595d;
+}
+.reference-list {
+  padding-left: 20px;
+}
+.reference-list li {
+  margin: 14px 0;
+}
+.reference-list p {
+  font-size: 13px;
+  color: #54595d;
+  margin: 4px 0;
+}
+.community-section {
+  margin-top: 42px;
+}
+.curriculum-nav {
+  width: 100%;
+}
+.curriculum-nav details {
+  margin-top: 14px;
+  border-bottom: 1px solid #eaecf0;
+  padding-bottom: 10px;
+}
+.curriculum-nav summary {
+  font-weight: 600;
+  color: #202122;
+  padding: 4px 0;
+}
+.curriculum-nav .curriculum-nav-part > summary {
+  font-size: 12px;
+  line-height: 1.7;
+  margin: 14px 0 4px;
+  padding-left: 8px;
+  color: #54595d;
+}
+.curriculum-nav details a {
+  display: block;
+  font-size: 12px;
+  padding: 6px 8px;
+  margin: 0;
+}
+.curriculum-sidebar {
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.volume-chapters {
+  list-style: none;
+}
+.textbook-markdown {
+  font-size: 17px;
+  line-height: 1.95;
+}
+.textbook-markdown h2 {
+  margin-top: 40px;
+  font-size: 24px;
+}
+.textbook-markdown h3 {
+  font-size: 20px;
+}
+.textbook-markdown pre:has(.language-license) {
+  max-height: 28rem;
+  overflow: auto;
+}
+@media print {
+  .textbook-markdown pre:has(.language-license) {
+    max-height: none;
+    overflow: visible;
+  }
+}
+.textbook-markdown blockquote {
+  font-size: 14px;
+}
+.textbook-figure {
+  display: block;
+  margin: 30px 0;
+  border: 1px solid #eaecf0;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.textbook-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #fafbf9;
+}
+.textbook-caption {
+  display: block;
+  border-top: 1px solid #eaecf0;
+  font-size: 12px;
+  line-height: 1.85;
+  color: #54595d;
+  padding: 12px 16px;
+}
+.markdown .katex {
+  font-size: 1.06em;
+}
+.markdown .katex-display {
+  max-width: 100%;
+  overflow: auto hidden;
+  padding: 15px 8px;
+  margin: 24px 0;
+  background: #fafbf9;
+  border: 1px solid #eaecf0;
+  border-radius: 3px;
+}
+.markdown .katex-display > .katex {
+  white-space: nowrap;
+}
+.curriculum-mobile-toc {
+  display: none;
+}
+.curriculum-mobile-toc nav a {
+  display: block;
+  padding: 4px 0;
+  font-size: 13px;
+}
+.curriculum-pager {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  padding-top: 24px;
+  margin-top: 42px;
+  border-top: 1px solid #c8ccd1;
+  font-size: 15px;
+}
+.curriculum-pager a:last-child {
+  text-align: right;
+}
+.curriculum-pager a span {
+  display: block;
+  font-size: 12px;
+  color: #72777d;
+  margin-bottom: 8px;
+}
+.curriculum-print-chapter {
+  margin: 50px 0;
+}
+.curriculum-print-chapter .curriculum-chapter-title {
+  font-size: 30px;
+  font-weight: 500;
+  margin-top: 8px;
+}
+@media (max-width: 1150px) {
+  .curriculum-mobile-toc {
+    display: block;
+    background: #f8f9fa;
+    padding: 14px 18px;
+    margin: 24px 0;
+    border: 1px solid #eaecf0;
+  }
+}
+@media (max-width: 720px) {
+  .learning-stages {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .curriculum-volumes {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+  .curriculum-volume:last-child {
+    grid-column: auto;
+  }
+  .curriculum-sidebar {
+    display: block;
+    max-height: none;
+    overflow: visible;
+  }
+  .curriculum-nav {
+    font-size: 13px;
+  }
+  .curriculum-nav details {
+    margin-top: 6px;
+  }
+  .curriculum-nav details a {
+    padding: 6px 8px;
+  }
+  .textbook-markdown {
+    font-size: 16px;
+  }
+  .textbook-markdown h2 {
+    font-size: 22px;
+  }
+  .textbook-markdown h3 {
+    font-size: 19px;
+  }
+  .textbook-caption {
+    font-size: 11px;
+    padding: 10px 12px;
+  }
+  .curriculum-pager {
+    font-size: 13px;
+    gap: 15px;
+  }
+  .markdown .katex {
+    font-size: 1em;
+  }
+}
+@media print {
+  @page {
+    size: A4;
+    margin: 18mm 16mm;
+  }
+  body {
+    padding: 0;
+  }
+  .site-header,
+  .wiki-subnav,
+  .site-footer,
+  .sidebar,
+  .right-rail,
+  .curriculum-mobile-toc,
+  .curriculum-pager,
+  .toolbar,
+  .print-reading-link,
+  .breadcrumbs {
+    display: none;
+  }
+  .reading-layout {
+    display: block;
+    max-width: none;
+    padding: 0;
+    min-height: 0;
+  }
+  .textbook-markdown {
+    font-size: 10pt;
+    line-height: 1.8;
+  }
+  .textbook-markdown h2 {
+    font-size: 16pt;
+    break-after: avoid;
+  }
+  .textbook-markdown h3 {
+    font-size: 14pt;
+    break-after: avoid;
+  }
+  .curriculum-print-chapter {
+    break-before: page;
+    margin-top: 0;
+  }
+  .textbook-figure,
+  .markdown .katex-display {
+    break-inside: avoid;
+  }
+  .textbook-figure img {
+    max-height: 70mm;
+    object-fit: contain;
+  }
+  .textbook-caption {
+    font-size: 8pt;
+  }
+  .markdown .katex-display {
+    font-size: 9pt;
+    overflow: visible;
+    border: 0;
+  }
+  .markdown table {
+    display: table;
+    font-size: 8pt;
+  }
+  .markdown pre {
+    overflow: visible;
+    white-space: pre-wrap;
+    font-size: 8pt;
+  }
+  .markdown pre code {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+}
