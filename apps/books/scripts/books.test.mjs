@@ -203,6 +203,39 @@ test('Deterministic worked answers: Bayes, fusion, RC and convolution', () => {
   for (let n = 0; n < 10; n++)
     approx(Math.cos(2 * Math.PI * 0.3 * n), Math.cos(2 * Math.PI * 0.7 * n))
 })
+test('Preview accepts explicit container hosts but never a wildcard', async () => {
+  const previous = process.env.BOOKS_ALLOWED_HOSTS
+  let server
+  try {
+    process.env.BOOKS_ALLOWED_HOSTS = '*'
+    assert.throws(() => createServer(), /explicit hostnames/)
+    process.env.BOOKS_ALLOWED_HOSTS = 'localhost,127.0.0.1,[::1],books'
+    server = createServer()
+    await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve))
+    const request = (host) =>
+      new Promise((resolve, reject) => {
+        const req = http.get(
+          {
+            hostname: '127.0.0.1',
+            port: server.address().port,
+            path: '/books/',
+            headers: { Host: host },
+          },
+          (res) => {
+            res.resume()
+            res.on('end', () => resolve(res.statusCode))
+          },
+        )
+        req.on('error', reject)
+      })
+    assert.equal(await request('books:8083'), 200)
+    assert.equal(await request('evil.example'), 403)
+  } finally {
+    if (previous === undefined) delete process.env.BOOKS_ALLOWED_HOSTS
+    else process.env.BOOKS_ALLOWED_HOSTS = previous
+    if (server) await new Promise((resolve) => server.close(resolve))
+  }
+})
 test('Local preview only serves built files, rejects traversal and writes', async () => {
   const server = createServer()
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve))

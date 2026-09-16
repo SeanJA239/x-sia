@@ -9,6 +9,6 @@ export default defineConfig({
     port: 8082,
     strictPort: true,
     hmr: { clientPort: 8787 },
-    proxy: { '/api/v1': 'http://127.0.0.1:8788' },
+    proxy: { '/api/v1': process.env.WIKI_API_ORIGIN ?? 'http://127.0.0.1:8788' },
   },
 })

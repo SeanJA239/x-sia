@@ -1,0 +1,36 @@
+# Standalone manifest, NOT an override of the local/preview stacks.
+# TLS ingress routes separate portal and site domains to these loopback ports.
+name: x-sia-production
+
+x-runtime: &runtime
+  init: true
+  read_only: true
+  restart: unless-stopped
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  tmpfs: [/tmp]
+
+services:
+  portal:
+    <<: *runtime
+    image: ${PORTAL_IMAGE:?Set a reviewed portal image digest}
+    environment:
+      API_ORIGIN: ${API_ORIGIN:?Set the HTTPS Cloudflare Worker origin}
+      WIKI_ORIGIN: wiki:3000
+    ports: ["127.0.0.1:8787:8080"]
+    tmpfs: [/tmp, /config, /data]
+    depends_on:
+      wiki: {condition: service_healthy}
+
+  wiki:
+    <<: *runtime
+    image: ${WIKI_IMAGE:?Set a reviewed wiki image digest}
+    environment:
+      WIKI_API_ORIGIN: ${API_ORIGIN:?Set the HTTPS Cloudflare Worker origin}
+
+  site:
+    <<: *runtime
+    image: ${SITE_IMAGE:?Set a reviewed site image digest}
+    ports: ["127.0.0.1:8084:3000"]
+
+# Intentionally no API container, local D1/R2, AI emulator, books or dev gateway.

@@ -17,9 +17,9 @@
       "binding": "DB",
       "database_name": "x-sia-db",
       // Real database_id is provisioned per environment (`wrangler d1 create x-sia-db`)
-      // and injected via `wrangler deploy --var` or a named env block before first deploy.
-      // Local dev never reads this value — `wrangler dev`/d1 migrations always target
-      // the `--local` SQLite simulation.
+      // and supplied in an explicitly reviewed named environment config before deploy.
+      // --var cannot configure a D1 binding. See docs/deployment-operations.md.
+      // Container development uses wrangler.test.jsonc with explicit --local.
       "database_id": "TODO",
       "migrations_dir": "./migrations"
     }

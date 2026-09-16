@@ -1,0 +1,56 @@
+name: x-sia-preview
+
+x-runtime: &runtime
+  init: true
+  read_only: true
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  tmpfs: [/tmp]
+  restart: unless-stopped
+
+services:
+  # Deliberately local simulation; NOT the API production runtime.
+  api:
+    build: {context: ., target: development}
+    init: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    working_dir: /workspace/apps/api
+    environment:
+      WRANGLER_SEND_METRICS: "false"
+    command: [sh, -ec, "pnpm exec wrangler d1 migrations apply x-sia-db --config wrangler.test.jsonc --local && exec pnpm exec wrangler dev --config wrangler.test.jsonc --local --ip 0.0.0.0 --port 8788"]
+    volumes: [wrangler_state:/workspace/apps/api/.wrangler]
+    healthcheck:
+      test: [CMD, node, -e, "fetch('http://127.0.0.1:8788/').then(r=>process.exit(r.status===404?0:1)).catch(()=>process.exit(1))"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 20s
+
+  wiki:
+    <<: *runtime
+    build: {context: ., target: wiki}
+    environment:
+      WIKI_API_ORIGIN: ${API_ORIGIN:-http://api:8788}
+    depends_on:
+      api: {condition: service_healthy}
+
+  site:
+    <<: *runtime
+    build: {context: ., target: site}
+    ports: ["127.0.0.1:8084:3000"]
+
+  portal:
+    <<: *runtime
+    build: {context: ., target: portal}
+    environment:
+      API_ORIGIN: ${API_ORIGIN:-http://api:8788}
+      WIKI_ORIGIN: wiki:3000
+    tmpfs: [/tmp, /config, /data]
+    ports: ["127.0.0.1:8787:8080"]
+    depends_on:
+      api: {condition: service_healthy}
+      wiki: {condition: service_healthy}
+
+volumes:
+  wrangler_state:

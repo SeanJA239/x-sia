@@ -22,6 +22,21 @@ pnpm check                 # biome 格式与 lint
 pnpm test                  # 全部测试
 ```
 
+## 容器与制品
+
+固定工具链：Node 24.14.0 / pnpm 10.32.1。Docker 内不需要宿主 pnpm。
+
+```sh
+docker compose -f compose.dev.yaml up --build --watch       # 本地 Wrangler + Expo + Wiki + 网关
+docker compose -f compose.preview.yaml up --build -d        # 静态 Web + Node SSR 的 production-like 验证
+pnpm quality && pnpm build:artifacts                       # 显式质量与制品门禁
+pnpm deploy:dry-run                                       # 仅离线 Worker bundle，绝不发布
+```
+
+开发与 preview 占用相同回环端口，不能同时启动。生产 API 始终是 Cloudflare Worker；
+生产 Compose 只承载 portal/Wiki/Site，真实部署命令默认封闭。
+见 [部署架构](docs/deployment-architecture.md) 和 [完整操作、安全边界及验证限制](docs/deployment-operations.md)。
+
 ## Wiki 本地联调
 
 入口 `http://localhost:8787/wiki/`；独立前端复用现有 Hono API 和账号。

@@ -1,0 +1,144 @@
+name: x-sia-dev
+
+x-dev: &dev
+  image: x-sia-development:local
+  build:
+    context: .
+    target: development
+  init: true
+  security_opt: [no-new-privileges:true]
+  cap_drop: [ALL]
+  environment: &dev-env
+    CI: "1"
+    EXPO_NO_DOTENV: "1"
+    EXPO_NO_TELEMETRY: "1"
+    WRANGLER_SEND_METRICS: "false"
+  volumes:
+    - root_modules:/workspace/node_modules
+    - api_modules:/workspace/apps/api/node_modules
+    - app_modules:/workspace/apps/app/node_modules
+    - wiki_modules:/workspace/apps/wiki/node_modules
+    - site_modules:/workspace/apps/site/node_modules
+    - books_modules:/workspace/apps/books/node_modules
+  # Source arrives via the filtered image, not a bind of a secret-bearing worktree.
+  # Compose watch updates code only; manifests require rebuild + deps recreation.
+  develop:
+    watch:
+      - action: sync
+        path: .
+        target: /workspace
+        ignore:
+          - Dockerfile
+          - "compose.*.yaml"
+          - pnpm-lock.yaml
+          - pnpm-workspace.yaml
+          - "**/node_modules/"
+          - "**/.env*"
+          - "**/.dev.vars*"
+          - "**/*.local"
+          - "**/*.pem"
+          - "**/*.key"
+          - "**/*.p12"
+          - "**/*.pfx"
+          - "**/.npmrc"
+          - "**/.pnpmrc"
+          - "**/.git/"
+          - "**/.claude/"
+          - "**/.vscode/"
+          - "**/*production.json"
+          - "**/*secret*"
+          - "**/*credential*"
+          - "**/.wrangler/"
+          - "**/.expo/"
+          - "**/.source/"
+          - "**/.react-router/"
+          - "**/build/"
+          - "**/dist/"
+          - "**/package.json"
+
+services:
+  deps:
+    <<: *dev
+    command: [pnpm, install, --frozen-lockfile]
+    restart: "no"
+
+  api:
+    <<: *dev
+    working_dir: /workspace/apps/api
+    depends_on:
+      deps: {condition: service_completed_successfully}
+    # No remote AI, no automatic seed. Use exactly this config/state for migrations.
+    command: [sh, -ec, "pnpm exec wrangler d1 migrations apply x-sia-db --config wrangler.test.jsonc --local && exec pnpm exec wrangler dev --config wrangler.test.jsonc --local --ip 0.0.0.0 --port 8788"]
+    volumes:
+      - root_modules:/workspace/node_modules
+      - api_modules:/workspace/apps/api/node_modules
+      - wrangler_state:/workspace/apps/api/.wrangler
+    healthcheck:
+      test: [CMD, node, -e, "fetch('http://127.0.0.1:8788/').then(r=>process.exit(r.status===404?0:1)).catch(()=>process.exit(1))"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 20s
+
+  app:
+    <<: *dev
+    depends_on:
+      deps: {condition: service_completed_successfully}
+    environment:
+      <<: *dev-env
+      EXPO_PUBLIC_API_URL: ""
+      EXPO_PUBLIC_WIKI_URL: /wiki/
+    command: [pnpm, --filter, app, exec, expo, start, --web, --host, lan, --port, "8081"]
+
+  wiki:
+    <<: *dev
+    depends_on:
+      deps: {condition: service_completed_successfully}
+    environment:
+      <<: *dev-env
+      WIKI_API_ORIGIN: http://api:8788
+    command: [pnpm, --filter, wiki, exec, react-router, dev, --host, 0.0.0.0, --port, "8082", --strictPort]
+
+  gateway:
+    <<: *dev
+    depends_on:
+      api: {condition: service_healthy}
+      app: {condition: service_started}
+      wiki: {condition: service_started}
+    environment:
+      <<: *dev-env
+      GATEWAY_HOST: 0.0.0.0
+      GATEWAY_API_ORIGIN: http://api:8788
+      GATEWAY_APP_ORIGIN: http://app:8081
+      GATEWAY_WIKI_ORIGIN: http://wiki:8082
+      GATEWAY_BOOKS_ORIGIN: http://books:8083
+    ports: ["127.0.0.1:8787:8787"]
+    command: [node, --watch, scripts/dev-gateway.mjs]
+
+  site:
+    <<: *dev
+    profiles: [site]
+    depends_on:
+      deps: {condition: service_completed_successfully}
+    ports: ["127.0.0.1:8084:8084"]
+    command: [pnpm, --filter, site, exec, react-router, dev, --host, 0.0.0.0, --port, "8084", --strictPort]
+
+  books:
+    <<: *dev
+    profiles: [books]
+    depends_on:
+      deps: {condition: service_completed_successfully}
+    environment:
+      <<: *dev-env
+      BOOKS_HOST: 0.0.0.0
+      BOOKS_ALLOWED_HOSTS: localhost,127.0.0.1,[::1],books
+    command: [pnpm, --filter, books, dev]
+
+volumes:
+  root_modules:
+  api_modules:
+  app_modules:
+  wiki_modules:
+  site_modules:
+  books_modules:
+  wrangler_state:

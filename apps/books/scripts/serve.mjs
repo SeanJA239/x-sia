@@ -17,6 +17,15 @@ const types = {
   '.ttf': 'font/ttf',
 }
 export function createServer(directory = path.join(root, 'dist')) {
+  // Keep the DNS-rebinding guard even when explicitly binding to 0.0.0.0.
+  const allowedHosts = new Set(
+    (process.env.BOOKS_ALLOWED_HOSTS ?? 'localhost,127.0.0.1,[::1]')
+      .split(',')
+      .map((host) => host.trim().toLowerCase())
+      .filter(Boolean),
+  )
+  if (!allowedHosts.size || allowedHosts.has('*'))
+    throw new Error('BOOKS_ALLOWED_HOSTS requires explicit hostnames, not a wildcard')
   return http.createServer(async (req, res) => {
     const headers = {
       'Cache-Control': 'no-store',
@@ -37,8 +46,8 @@ export function createServer(directory = path.join(root, 'dist')) {
     }
     try {
       const host = new URL(`http://${req.headers.host}`).hostname
-      if (!['localhost', '127.0.0.1', '[::1]'].includes(host)) {
-        finish(403, 'Loopback host required')
+      if (!allowedHosts.has(host)) {
+        finish(403, 'Preview host not allowed')
         return
       }
       const decoded = decodeURIComponent((req.url ?? '/').split('?')[0])
@@ -81,13 +90,16 @@ export function createServer(directory = path.join(root, 'dist')) {
   })
 }
 async function start() {
+  const host = process.env.BOOKS_HOST ?? '127.0.0.1'
+  const port = Number(process.env.BOOKS_PORT ?? 8083)
+  if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error('Invalid BOOKS_PORT')
   await build()
   const server = createServer()
   server.on('error', (error) => {
     console.error(error.message)
     process.exitCode = 1
   })
-  server.listen(8083, '127.0.0.1', () => console.log('Books preview: http://localhost:8083/books/'))
+  server.listen(port, host, () => console.log('Books preview ready: /books/'))
   const watchers = []
   if (process.argv.includes('--watch')) {
     let timer,

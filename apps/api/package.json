@@ -5,11 +5,12 @@
   "scripts": {
     "dev": "wrangler dev",
     "dev:no-ai": "wrangler dev --config wrangler.test.jsonc",
-    "deploy": "wrangler deploy",
+    "deploy": "node ../../scripts/release.mjs production",
+    "deploy:dry-run": "node ../../scripts/release.mjs dry-run",
     "test": "vitest run",
     "migrate:local": "wrangler d1 migrations apply x-sia-db --local",
     "seed": "wrangler d1 execute x-sia-db --local --file=./seed.sql",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "wrangler types && tsc --noEmit"
   },
   "dependencies": {
     "drizzle-orm": "^0.44.2",

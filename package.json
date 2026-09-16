@@ -1,6 +1,11 @@
 {
   "name": "x-sia",
   "private": true,
+  "packageManager": "pnpm@10.32.1",
+  "engines": {
+    "node": ">=24.14.0 <25",
+    "pnpm": "10.32.1"
+  },
   "scripts": {
     "dev:gateway": "node scripts/dev-gateway.mjs",
     "dev:books": "pnpm --filter books dev",
@@ -12,7 +17,20 @@
     "check": "biome check .",
     "check:fix": "biome check --write .",
     "test": "pnpm -r --if-present test",
-    "build": "pnpm -r --if-present build"
+    "build": "pnpm build:artifacts",
+    "quality": "node scripts/workflow.mjs quality",
+    "build:web": "node scripts/workflow.mjs web",
+    "build:artifacts": "node scripts/workflow.mjs build",
+    "test:deployment": "node --test scripts/deployment.test.mjs",
+    "smoke:production": "pnpm --filter wiki test:curriculum:production",
+    "deploy:dry-run": "node scripts/release.mjs dry-run",
+    "deploy:check": "node scripts/release.mjs check",
+    "deploy:production": "node scripts/release.mjs production",
+    "docker:config": "docker compose -f compose.dev.yaml --profile site --profile books config --quiet && docker compose -f compose.preview.yaml config --quiet",
+    "docker:config:production": "pnpm deploy:check && docker compose -f compose.production.yaml config --quiet",
+    "docker:build": "docker compose -f compose.preview.yaml build",
+    "docker:quality": "docker build --target quality -t x-sia-quality:local .",
+    "docker:artifacts": "docker build --target artifacts --output type=local,dest=.artifacts/export ."
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.0"

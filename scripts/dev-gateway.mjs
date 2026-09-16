@@ -1,13 +1,41 @@
-// Loopback-only development gateway. Never log request URLs, headers or bodies.
+// Loopback by default; opt in to container networking. Never log request data.
 import http from 'node:http'
 import net from 'node:net'
 
-function targetPort(url = '/') {
+function origin(name, port) {
+  const value = process.env[`GATEWAY_${name}_ORIGIN`] ?? `http://127.0.0.1:${port}`
+  let url
+  try {
+    url = new URL(value)
+  } catch {
+    throw new Error(`Invalid GATEWAY_${name}_ORIGIN`)
+  }
+  if (
+    url.protocol !== 'http:' ||
+    url.username ||
+    url.password ||
+    url.pathname !== '/' ||
+    url.search ||
+    url.hash
+  )
+    throw new Error(`GATEWAY_${name}_ORIGIN must be a plain HTTP origin without credentials`)
+  return { hostname: url.hostname.replace(/^\[|\]$/g, ''), port: Number(url.port || 80) }
+}
+const targets = {
+  api: origin('API', 8788),
+  app: origin('APP', 8081),
+  wiki: origin('WIKI', 8082),
+  books: origin('BOOKS', 8083),
+}
+const host = process.env.GATEWAY_HOST ?? '127.0.0.1'
+const port = Number(process.env.GATEWAY_PORT ?? 8787)
+if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error('Invalid GATEWAY_PORT')
+function target(url = '/') {
   const path = url.split('?')[0]
-  if (path === '/api/v1' || path.startsWith('/api/v1/')) return 8788
-  if (path === '/wiki' || path.startsWith('/wiki/')) return 8082
-  if (path === '/books' || path.startsWith('/books/')) return 8083
-  return 8081
+  if (path === '/api/v1' || path.startsWith('/api/v1/')) return targets.api
+  if (path === '/wiki' || path.startsWith('/wiki/')) return targets.wiki
+  if (path === '/books' || path.startsWith('/books/')) return targets.books
+  return targets.app
 }
 const server = http.createServer((req, res) => {
   const barePrefix = ['/wiki', '/books'].find(
@@ -23,8 +51,7 @@ const server = http.createServer((req, res) => {
   }
   const upstream = http.request(
     {
-      hostname: '127.0.0.1',
-      port: targetPort(req.url),
+      ...target(req.url),
       method: req.method,
       path: req.url,
       headers: req.headers,
@@ -60,7 +87,8 @@ const server = http.createServer((req, res) => {
   req.pipe(upstream)
 })
 server.on('upgrade', (req, socket, head) => {
-  const upstream = net.connect(targetPort(req.url), '127.0.0.1', () => {
+  const destination = target(req.url)
+  const upstream = net.connect(destination.port, destination.hostname, () => {
     const headers = []
     for (let i = 0; i < req.rawHeaders.length; i += 2)
       headers.push(`${req.rawHeaders[i]}: ${req.rawHeaders[i + 1]}`)
@@ -79,6 +107,4 @@ server.on('error', (error) => {
   console.error(error.message)
   process.exitCode = 1
 })
-server.listen(8787, '127.0.0.1', () =>
-  console.log('Local gateway: http://localhost:8787 | Wiki: /wiki/ | Books: /books/'),
-)
+server.listen(port, host, () => console.log('Local gateway ready | Wiki: /wiki/ | Books: /books/'))

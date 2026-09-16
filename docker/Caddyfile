@@ -1,0 +1,58 @@
+{
+	admin off
+	auto_https off
+	# TLS is terminated by the hosting ingress. Do not enable access logs:
+	# check-in/download URLs may contain credentials. Proxy error logs also
+	# carry request metadata, so suppress that logger rather than leak URLs.
+	log default {
+		exclude http.log.error
+	}
+}
+
+:8080 {
+	encode zstd gzip
+	header X-Content-Type-Options nosniff
+	header Referrer-Policy no-referrer
+
+	handle /healthz {
+		respond "ok" 200
+	}
+
+	# handle (NOT handle_path) preserves the full /api/v1 and /wiki prefixes.
+	@api path /api/v1 /api/v1/*
+	handle @api {
+		header Cache-Control no-store
+		reverse_proxy {$API_ORIGIN} {
+			# Required for HTTPS Worker virtual hosting and TLS SNI.
+			header_up Host {upstream_hostport}
+		}
+	}
+	@wiki_bare path /wiki
+	handle @wiki_bare {
+		redir /wiki/ 308
+	}
+	@wiki path /wiki/*
+	handle @wiki {
+		reverse_proxy {$WIKI_ORIGIN:wiki:3000}
+	}
+	# Books are an offline artifact, never a production dependency.
+	@books path /books /books/*
+	handle @books {
+		respond "Not found" 404
+	}
+
+	handle {
+		root * /srv
+		# Expo single-page static export: arbitrary member/certificate deep links.
+		# Missing assets must be 404, not HTML masquerading as JavaScript.
+		@assets path /_expo/* /assets/* /favicon.ico
+		handle @assets {
+			file_server
+		}
+		handle {
+			header Cache-Control no-cache
+			try_files {path} /index.html
+			file_server
+		}
+	}
+}

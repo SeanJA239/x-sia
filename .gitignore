@@ -9,3 +9,9 @@ build/
 .DS_Store
 .source/
 .dev.vars
+.dev.vars.*
+!.env.example
+!**/.dev.vars.example
+.artifacts/
+.local/
+*.production.json
